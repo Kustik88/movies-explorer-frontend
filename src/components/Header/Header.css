@@ -1,0 +1,50 @@
+.header {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 70px 20px;
+  box-sizing: border-box;
+}
+
+.header_theme_dark-blue {
+  background-color: #073042;
+}
+
+.header__links {
+  margin: 18px 0 6px;
+  display: flex;
+  column-gap: 50px;
+  text-align: right;
+  margin-right: 21px;
+  margin-top: 12px;
+}
+
+.header__link {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 133%;
+  text-align: right;
+  color: white;
+  margin: 0;
+  text-decoration: none;
+}
+
+.header__link_background_green {
+  color: #000000;
+  position: relative;
+  z-index: 0;
+}
+
+.header__link_background_green::before {
+  content: "";
+  position: absolute;
+  top: -48%;
+  left: -54%;
+  width: 100%;
+  height: 100%;
+  padding: 6px 20px;
+  background-color: #3DDC84;
+  z-index: -1;
+  border-radius: 3px
+}

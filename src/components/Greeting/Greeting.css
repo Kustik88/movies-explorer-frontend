@@ -1,0 +1,17 @@
+.greeting {
+  width: 396px;
+  padding-top: 70px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 40px;
+}
+
+.greeting__heading {
+  color: #FFF;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin: 0;
+}

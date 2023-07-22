@@ -1,0 +1,78 @@
+.about-project {
+  max-width: 1140px;
+  padding: 111px 0 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.about-project__info {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  column-gap: 40px;
+  margin-top: 92px;
+  padding: 0;
+}
+
+.about-project__description {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 28px;
+}
+
+.about-project__heading {
+  max-width: 100%;
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 400;
+  letter-spacing: -0.9px;
+  margin: 0;
+}
+
+.about-project__paragraph {
+  max-width: 100%;
+  font-size: 14px;
+  line-height: 143%;
+  font-weight: 400;
+  margin: 0;
+}
+
+.about-project__scale {
+  margin: 109px auto 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 228px 1fr;
+  grid-template-rows: repeat(2, 36px);
+  row-gap: 5px;
+  text-align: center;
+  padding-bottom: 100px;
+}
+
+.about-project__scale-item {
+  background-color: #303030;
+  width: 100%;
+}
+
+.about-project__scale-item_theme_green {
+  background-color: #3DDC84;
+}
+
+.about-project__stage {
+  max-width: 200px;
+  font-size: 14px;
+  line-height: 121%;
+  font-weight: 400;
+  text-align: center;
+  margin: 10px auto 0;
+  color: #fff;
+}
+
+.about-project__stage_color_black {
+  color: #000;
+}
+
+.about-project__stage_color_grey {
+  color: #8B8B8B;
+}

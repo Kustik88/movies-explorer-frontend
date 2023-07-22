@@ -1,0 +1,32 @@
+.navigation {
+  width: fit-content;
+  margin: 9px 0 0 65px;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation__links {
+  width: fit-content;
+  display: flex;
+  justify-content: space-between;
+  column-gap: 16px;
+  padding: 0;
+  list-style-type: none;
+  margin: 0;
+}
+
+.navigation__link {
+  max-width: fit-content;
+  padding: 0;
+  margin: 0 auto;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 138%;
+  color: #fff;
+  text-decoration: none;
+}
+
+.navigation__link_active {
+  font-weight: 500;
+}

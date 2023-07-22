@@ -1,0 +1,23 @@
+.adder-movies {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 63px 0 80px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.adder-movies__btn {
+  width: 320px;
+  height: 36px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 125%;
+  color: #fff;
+  border: 1px solid #424242;
+  border-radius: 6px;
+  background-color: inherit;
+  padding: 0;
+  cursor: pointer;
+}
