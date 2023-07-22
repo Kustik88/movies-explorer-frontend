@@ -15,3 +15,7 @@
   line-height: 121%;
   margin: 0;
 }
+
+.greeting__heading_position_center {
+  text-align: center;
+}

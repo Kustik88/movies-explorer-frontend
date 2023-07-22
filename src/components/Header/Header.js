@@ -4,7 +4,7 @@ import './Header.css'
 import '../App/App.css'
 import LogoProject from '../LogoProject/LogoProject'
 import Navigation from '../Navigation/Navigation'
-import Profile from '../Profile/Profile'
+import ProfileLink from '../ProfileLink/ProfileLink'
 
 function Header({ isLoggedIn }) {
   return (
@@ -13,7 +13,7 @@ function Header({ isLoggedIn }) {
       {isLoggedIn
         ? <>
           <Navigation />
-          <Profile />
+          <ProfileLink />
         </>
         : <div className='header__links'>
           <Link to='/sign-up' className='link header__link'>Регистрация</Link>

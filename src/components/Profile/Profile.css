@@ -1,32 +1,5 @@
 .profile {
-  width: fit-content;
-  display: flex;
-  column-gap: 13px;
-  justify-content: space-between;
-  margin: 0;
-  text-decoration: none;
+  width: 100%;
 }
 
-.profile__account {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 114%;
-  color: #fff;
-  margin: 10px 0 0;
-}
-
-.profile__icon-container {
-  width: 30px;
-  height: 30px;
-  background-color: #313131;
-  border-radius: 6px;
-  text-align: center;
-  line-height: 30px;
-  margin: 2px auto 0
-}
-
-.profile__icon {
-  width: 10px;
-  height: 11px;
-  vertical-align: middle;
-}
+.profile__greeting {}

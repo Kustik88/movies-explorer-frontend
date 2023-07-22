@@ -7,21 +7,25 @@ import Movies from '../Movies/Movies'
 import SavedMovies from '../SavedMovies/SavedMovies'
 import Login from '../Login/Login'
 import Register from '../Register/Register'
+import Profile from '../Profile/Profile'
 import Footer from '../Footer/Footer'
 import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
 
 function App() {
   const location = useLocation()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [isLikedMoviesPage, setIsLikedMoviesPage] = useState(true)
 
-  const hideHeaderFooter = (pathname) => ['/sign-in', '/sign-up'].includes(pathname)
-  const isRegisterPathName = (pathname) => '/sign-up'.includes(pathname)
+  const hideHeader = (pathName) => ['/sign-in', '/sign-up'].includes(pathName)
+  const hideFooter = (pathName) => ['/sign-in', '/sign-up', '/profile'].includes(pathName)
+  const togleHeaderTheme = (pathName) => '/'.includes(pathName)
+  const isRegisterPathName = (pathName) => '/sign-up'.includes(pathName)
+  const isProfilePathName = (pathName) => '/profile'.includes(pathName)
 
   return (
     <div className="App">
-      {!hideHeaderFooter(location.pathname) && <Header isLoggedIn={isLoggedIn} />}
+      {!hideHeader(location.pathname) && <Header isLoggedIn={!togleHeaderTheme(location.pathname)} />}
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/movies' element={
@@ -38,7 +42,7 @@ function App() {
         <Route
           path='/sign-in' element={
             <Login
-              greetingText='Рады видеть!'
+              greetingText='Рады видеть'
               formName='login'
               isRegisterPathName={isRegisterPathName(location.pathname)}
             />} />
@@ -46,16 +50,17 @@ function App() {
           path='/sign-up'
           element={
             <Register
-              greetingText='Добро пожаловать!'
+              greetingText='Добро пожаловать'
               formName='register'
               isRegisterPathName={isRegisterPathName(location.pathname)}
             />} />
-        {/* <Route path='/profile' element={<Profile />} /> */}
+        <Route path='/profile' element={
+          <Profile greetingText='Привет, Виталий' isProfilePathName={isProfilePathName} />} />
 
 
 
       </Routes>
-      {!hideHeaderFooter(location.pathname) && <Footer />}
+      {!hideFooter(location.pathname) && <Footer />}
     </div>
   );
 }
