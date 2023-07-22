@@ -3,11 +3,12 @@ import '../App/App.css'
 import { Link } from 'react-router-dom'
 import Portfolio from '../Portfolio/Portfolio'
 import avatar from '../../images/avatar.jpg'
+import SectionTitle from '../SectionTitle/SectionTitle'
 
 function AboutMe() {
   return (
     <section className='about-me'>
-      <h2 className='section-title'>Студент</h2>
+      <SectionTitle titleText='Студент' />
       <div className='about-me_profile'>
         <div className='about-me__info'>
           <h3 className='about-me__name'>Анастасия</h3>

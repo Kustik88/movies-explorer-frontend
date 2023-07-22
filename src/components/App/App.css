@@ -11,43 +11,16 @@
   text-rendering: optimizeLegibility;
 }
 
-.content {
-  width: 1280px;
-  margin: 0 auto;
-  color: white;
-}
-
-.section-title {
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 123%;
-  color: #fff;
-  margin: 0;
-  max-width: 100%;
-  letter-spacing: -1px;
-  position: relative;
-}
-
-/*промлема с адаптацией*/
-.section-title::after {
-  display: block;
-  width: 100%;
-  content: "";
-  border-bottom: 1px solid #D9D9D9;
-  position: absolute;
-  bottom: -23px;
-  left: 0;
-}
-
 .link {
   transition: opacity 1s ease-in-out;
 }
 
 .link:hover {
-  opacity: .8;
+  opacity: .7;
 }
 
 .btn {
+  cursor: pointer;
   transition: opacity 1s ease-in-out;
 }
 

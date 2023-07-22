@@ -1,12 +1,13 @@
-import './Login.css'
-import '../App/App.css'
+import Content from '../Content/Content'
 import Greeting from '../Greeting/Greeting'
+import UserDataForm from '../UserDataForm/UserDataForm'
 
-function Login({ greetingText }) {
+function Login({ greetingText, formName, isRegisterPathName }) {
   return (
-    <main className='content'>
+    <Content>
       <Greeting greetingText={greetingText} />
-    </main>
+      <UserDataForm formName={formName} isRegisterPathName={isRegisterPathName} />
+    </Content>
   )
 }
 

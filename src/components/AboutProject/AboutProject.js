@@ -1,12 +1,11 @@
 import './AboutProject.css'
 import '../App/App.css'
+import SectionTitle from '../SectionTitle/SectionTitle'
 
 function AboutProject() {
   return (
     <section className='about-project'>
-      <h2 className="section-title">
-        О проекте
-      </h2>
+      <SectionTitle titleText='О проекте' />
       <ul className='about-project__info'>
         <li className='about-project__description'>
           <h3 className='about-project__heading'>Дипломный проект включал 5 этапов</h3>
