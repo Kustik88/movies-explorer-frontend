@@ -1,0 +1,32 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  padding: 246px 0 60px;
+}
+
+.not-found_title {
+  margin: 0 auto;
+  font-size: 140px;
+  font-weight: 400;
+  line-height: 121%;
+  max-width: 400px;
+}
+
+.not-found__subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 119%;
+  max-width: 400px;
+  margin: 5px auto 0;
+}
+
+.not-found__return-link {
+  margin: 184px auto 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 121%;
+  color: #4285F4;
+  text-decoration: none
+}

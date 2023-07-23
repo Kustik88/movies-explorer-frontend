@@ -1,4 +1,5 @@
 import './SearchForm.css'
+import '../App/App.css'
 import searchIcon from '../../images/search-icon.svg'
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
@@ -19,7 +20,7 @@ function SearchForm() {
           maxLength="40"
           required />
         {/* <span className="form__input-error" id={'email-input-' + formName + '-error'} /> */}
-        <button type="submit" aria-label='искать фильм' className="search-form__submit-btn" />
+        <button type="submit" aria-label='искать фильм' className="btn search-form__submit-btn" />
       </form>
       <FilterCheckbox />
     </section>
