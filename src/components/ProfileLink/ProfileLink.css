@@ -30,3 +30,9 @@
   height: 11px;
   vertical-align: middle;
 }
+
+@media screen and (max-width: 768px) {
+  .profile-link {
+    margin: 200px auto 0;
+  }
+}

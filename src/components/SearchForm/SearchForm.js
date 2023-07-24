@@ -1,15 +1,12 @@
 import './SearchForm.css'
 import '../App/App.css'
-import searchIcon from '../../images/search-icon.svg'
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
 function SearchForm() {
   return (
     <section className='search-form'>
       <form className='search-form__form' noValidate>
-        <div className='search-form__search-icon-container'>
-          <img className='search-form__search-icon' src={searchIcon} alt='поиск' />
-        </div>
+        <div className='search-form__search-icon' />
         <input
           type="text"
           className="search-form__input"

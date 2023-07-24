@@ -23,7 +23,7 @@
   left: 0;
 }
 
-.search-form__search-icon-container {
+.search-form__search-icon {
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -32,13 +32,16 @@
   line-height: 32px;
   box-sizing: border-box;
   margin-left: 6px;
+  background-image: url(../../images/search-icon.svg);
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.search-form__search-icon {
+/* .search-form__search-icon {
   width: 15px;
   height: 15px;
   vertical-align: middle;
-}
+} */
 
 .search-form__input {
   width: 100%;

@@ -1,9 +1,7 @@
 .navigation {
   width: fit-content;
-  margin: 9px 0 0 65px;
+  margin: 9px 0 65px;
   padding: 0;
-  display: flex;
-  justify-content: space-between;
 }
 
 .navigation__links {
@@ -14,6 +12,10 @@
   padding: 0;
   list-style-type: none;
   margin: 0;
+}
+
+.navigation__links_placement_column {
+  flex-direction: column;
 }
 
 .navigation__link {
@@ -29,4 +31,18 @@
 
 .navigation__link_active {
   font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation {
+    margin: 9px auto 65px;
+  }
+
+  .navigation__link {
+    font-weight: 500;
+  }
+
+  .navigation__link_active {
+    text-decoration: underline;
+  }
 }
