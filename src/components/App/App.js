@@ -19,18 +19,18 @@ function App() {
   const location = useLocation()
   // const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [isLikedMoviesPage, setIsLikedMoviesPage] = useState(true)
-  const [isSmallScreen, setIsSmallScreen] = useState(true)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
-  // useEffect(() => {
-  //   function handleResize() {
-  //     setIsSmallScreen(window.innerWidth <= 768);
-  //   }
+  useEffect(() => {
+    function handleResize() {
+      setIsSmallScreen(window.innerWidth <= 768);
+    }
 
-  //   window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
 
-  //   // Чтобы убрать слушатель события при размонтировании компонента
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
+    // Чтобы убрать слушатель события при размонтировании компонента
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   function handleDropDownMenuClick() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)

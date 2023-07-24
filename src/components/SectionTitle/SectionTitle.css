@@ -19,3 +19,20 @@
   bottom: -23px;
   left: 0;
 }
+
+@media screen and (max-width:768px) {
+  .section-title::after {
+    bottom: -21px;
+  }
+}
+
+@media screen and (max-width:425px) {
+  .section-title {
+    font-size: 18px;
+    letter-spacing: -.72px;
+  }
+
+  .section-title::after {
+    bottom: -29px;
+  }
+}

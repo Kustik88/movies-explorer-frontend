@@ -22,13 +22,13 @@ function AboutProject() {
       </ul>
       <div className='about-project__scale'>
         <div className='about-project__scale-item about-project__scale-item_theme_green'>
-          <p className='about-project__stage about-project__stage_color_black'>1 неделя</p>
+          <p className='about-project__time about-project__time_color_black'>1 неделя</p>
         </div>
         <div className='about-project__scale-item'>
-          <p className='about-project__stage'>4 недели</p>
+          <p className='about-project__time'>4 недели</p>
         </div>
-        <p className='about-project__stage about-project__stage_color_grey'>Back-end</p>
-        <p className='about-project__stage about-project__stage_color_grey'>Front-end</p>
+        <p className='about-project__stage'>Back-end</p>
+        <p className='about-project__stage'>Front-end</p>
       </div>
     </section>
   )

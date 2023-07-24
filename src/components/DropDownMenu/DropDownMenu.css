@@ -3,7 +3,7 @@
   height: 100vh;
   background-color: transparent;
   position: absolute;
-  visibility: hidden;
+  display: none;
   z-index: 1;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .drop-down-menu_visible {
-  visibility: visible;
+  display: block;
 }
 
 .drop-down-menu__content {
@@ -37,15 +37,16 @@
 }
 
 .drop-down-menu__close-btn {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   position: absolute;
-  top: 22px;
-  right: 22px;
+  top: 24px;
+  right: 23px;
   background-image: url(../../images/dropDownMenu-close-icon.svg);
   background-size: cover;
   background-color: inherit;
   border: 0;
+  padding: 0;
 }
 
 .drop-down-menu__title {

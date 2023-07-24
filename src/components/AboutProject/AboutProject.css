@@ -1,7 +1,6 @@
 .about-project {
-  max-width: 1140px;
-  padding: 111px 0 0;
-  box-sizing: border-box;
+  max-width: 1280px;
+  padding: 111px 70px 0;
   margin: 0 auto;
 }
 
@@ -11,7 +10,7 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(1, 1fr);
   column-gap: 40px;
-  margin-top: 92px;
+  margin: 92px auto 0;
   padding: 0;
 }
 
@@ -27,7 +26,7 @@
   font-size: 20px;
   line-height: 120%;
   font-weight: 400;
-  letter-spacing: -0.9px;
+  letter-spacing: -0.8px;
   margin: 0;
 }
 
@@ -43,7 +42,7 @@
   margin: 109px auto 0;
   width: 100%;
   display: grid;
-  grid-template-columns: 228px 1fr;
+  grid-template-columns: 20% 1fr;
   grid-template-rows: repeat(2, 36px);
   row-gap: 5px;
   text-align: center;
@@ -59,7 +58,7 @@
   background-color: #3DDC84;
 }
 
-.about-project__stage {
+.about-project__time {
   max-width: 200px;
   font-size: 14px;
   line-height: 121%;
@@ -69,10 +68,89 @@
   color: #fff;
 }
 
-.about-project__stage_color_black {
+.about-project__stage {
+  max-width: 200px;
+  font-size: 14px;
+  line-height: 121%;
+  font-weight: 400;
+  text-align: center;
+  margin: 10px auto 0;
+  color: #8B8B8B;
+}
+
+.about-project__time_color_black {
   color: #000;
 }
 
-.about-project__stage_color_grey {
-  color: #8B8B8B;
+@media screen and (max-width:1024px) {
+  .about-project {
+    max-width: calc(100vw - 100px);
+    padding: 92px 0 0;
+  }
+}
+
+@media screen and (max-width:820px) {
+  .about-project__info {
+    column-gap: 28px;
+  }
+
+  .about-project__paragraph {
+    font-size: 12px;
+    line-height: 150%;
+  }
+
+  .about-project__description {
+    row-gap: 22px;
+  }
+
+  .about-project__scale {
+    margin-top: 93px;
+    grid-template-columns: 21% 1fr;
+    padding-bottom: 80px;
+  }
+}
+
+@media screen and (max-width:425px) {
+  .about-project {
+    max-width: calc(100vw - 36px);
+    padding: 70px 0 0;
+  }
+
+  .about-project__info {
+    grid-template-columns: 1fr;
+    margin-top: 89px;
+    row-gap: 57px;
+  }
+
+  .about-project__description {
+    row-gap: 15px;
+  }
+
+  .about-project__heading {
+    font-size: 18px;
+    line-height: 122%;
+    letter-spacing: -.72px;
+  }
+
+  .about-project__paragraph {
+    font-size: 11px;
+    line-height: 147%;
+  }
+
+  .about-project__scale {
+    margin-top: 60px;
+    grid-template-columns: 35% 1fr;
+    padding-bottom: 30px;
+  }
+
+  .about-project__time {
+    font-size: 11px;
+    line-height: 118%;
+  }
+
+  .about-project__stage {
+    font-size: 11px;
+    line-height: 118%;
+    margin-top: 5px;
+  }
 }

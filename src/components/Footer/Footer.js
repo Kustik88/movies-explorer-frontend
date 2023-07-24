@@ -2,7 +2,7 @@ import './Footer.css'
 import '../App/App.css'
 import { Link } from 'react-router-dom'
 
-function Footer() {
+function Footer({ isSmallScreen }) {
   return (
     <footer className='footer'>
       <h2 className='footer__title'>Учебный проект Яндекс.Практикум х BeatFilm.</h2>

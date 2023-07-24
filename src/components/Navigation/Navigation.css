@@ -35,14 +35,27 @@
 
 @media screen and (max-width: 768px) {
   .navigation {
-    margin: 9px auto 65px;
+    margin: 28px auto 0;
+  }
+
+  .navigation__links {
+    gap: 28px;
   }
 
   .navigation__link {
     font-weight: 500;
+    font-size: 18px;
+    line-height: 122%;
+    position: relative;
   }
 
-  .navigation__link_active {
-    text-decoration: underline;
+  .navigation__link_active::after {
+    display: block;
+    width: 100%;
+    content: "";
+    border-bottom: 2px solid #fff;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
   }
 }
