@@ -20,17 +20,30 @@ function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [isLikedMoviesPage, setIsLikedMoviesPage] = useState(true)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [isMiddleScreen, setIsMiddleScreen] = useState(false)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
+  const [numberOfCards, setNumberOfCards] = useState(0)
+
   useEffect(() => {
     function handleResize() {
-      setIsSmallScreen(window.innerWidth <= 768);
+      setIsSmallScreen(window.innerWidth <= 425);
+      setIsMiddleScreen(window.innerWidth > 425 && window.innerWidth <= 820)
     }
 
     window.addEventListener("resize", handleResize);
 
-    // Чтобы убрать слушатель события при размонтировании компонента
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      setNumberOfCards(5)
+    } else if (isMiddleScreen) {
+      setNumberOfCards(8)
+    } else {
+      setNumberOfCards(12)
+    }
+  }, [isSmallScreen, isMiddleScreen])
 
   function handleDropDownMenuClick() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
@@ -50,7 +63,7 @@ function App() {
       {showHeader(location.pathname)
         && <Header
           isLoggedIn={!togleHeaderTheme(location.pathname)}
-          isSmallScreen={isSmallScreen}
+          isMiddleScreen={isMiddleScreen || isSmallScreen}
           onIconMenuClick={handleDropDownMenuClick} />}
 
       <Routes>
@@ -60,6 +73,8 @@ function App() {
             moviesList={moviesList}
             moviesSavingList={moviesSavingList}
             isUserMovies={isLikedMoviesPage}
+            numberOfCards={numberOfCards}
+            isSmallScreen={isSmallScreen}
           />} />
         <Route path='/saved-movies' element={
           <SavedMovies

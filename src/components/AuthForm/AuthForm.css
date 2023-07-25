@@ -33,10 +33,10 @@
   box-sizing: border-box;
   border-bottom: 1px solid #424242;
   color: #FFF;
+  outline: none;
 }
 
 .auth-form__input:focus {
-  outline: none;
   border-bottom: 1px solid #4285F4;
 }
 

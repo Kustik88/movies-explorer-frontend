@@ -1,6 +1,7 @@
 .navigation {
   width: fit-content;
-  margin: 9px 0 65px;
+  margin: 9px 0 0 65px;
+  /*отрегулировать марджин в дроп меню*/
   padding: 0;
 }
 

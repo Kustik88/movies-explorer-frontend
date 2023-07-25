@@ -1,10 +1,10 @@
 .filter-checkbox {
   width: fit-content;
-  margin: 45px auto 0;
+  margin: 30px auto 0;
   display: flex;
   justify-content: space-between;
   column-gap: 12px;
-  padding-bottom: 50px;
+  padding-bottom: 47px;
 }
 
 .filter-checkbox__radio {
@@ -48,4 +48,16 @@
   font-weight: 400;
   line-height: 129%;
   margin: 0;
+}
+
+@media screen and (max-width:425px) {
+  .filter-checkbox {
+    margin-top: 41px;
+    padding-bottom: 50px;
+  }
+
+  .filter-checkbox__heading {
+    font-size: 11px;
+    line-height: 164%;
+  }
 }

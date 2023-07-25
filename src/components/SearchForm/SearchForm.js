@@ -2,11 +2,11 @@ import './SearchForm.css'
 import '../App/App.css'
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
-function SearchForm() {
+function SearchForm({ isSmallScreen }) {
   return (
     <section className='search-form'>
       <form className='search-form__form' noValidate>
-        <div className='search-form__search-icon' />
+        {!isSmallScreen && <div className='search-form__search-icon' />}
         <input
           type="text"
           className="search-form__input"

@@ -28,7 +28,7 @@
   border: 0;
 }
 
-.card__icon {
+.card__like-icon {
   width: 21px;
   height: 21px;
   position: absolute;
@@ -37,7 +37,7 @@
 
 }
 
-.card__icon_active {
+.card__like-icon_active {
   display: block;
 }
 
@@ -62,12 +62,12 @@
 
 .card__image {
   width: 100%;
-  min-height: 201px;
+  height: 201px;
   border-radius: 6px;
 }
 
 .card__descriprion {
-  width: calc(100% - 30px);
+  width: 100%;
   display: flex;
   margin: 11px 15px 0;
   justify-content: space-between;
@@ -82,16 +82,8 @@
   line-height: 123%;
   text-align: left;
   color: #fff;
-  /* text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden; */
   margin: 0;
 }
-
-/* .card__name_font-size_big {
-  font-size: 14px;
-  line-height: 121%;
-} */
 
 .card__duration-container {
   width: 52px;
@@ -108,4 +100,46 @@
   line-height: 91%;
   color: #8B8B8B;
   margin: 3px auto 0;
+}
+
+@media screen and (max-width: 820px) {
+  .card__image {
+    height: 190px;
+  }
+
+  .card__descriprion {
+    width: 100%;
+    margin: 21px auto 0;
+  }
+
+  .card__name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .card__like-icon {
+    top: 10px;
+    right: 10px;
+  }
+
+  .card__save-btn {
+    top: 10px;
+    right: 10px;
+  }
+
+  .card__image {
+    height: 168px;
+  }
+
+  .card__descriprion {
+    margin-top: 14px;
+  }
+
+  .card__name {
+    font-size: 12px;
+    line-height: 125%;
+  }
 }

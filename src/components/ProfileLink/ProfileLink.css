@@ -15,7 +15,7 @@
   margin: 10px 0 0;
 }
 
-.profile-link__icon-container {
+.profile-link__icon {
   width: 30px;
   height: 30px;
   background-color: #313131;
@@ -26,12 +26,6 @@
   background-image: url(../../images/profile-icon.svg);
   background-repeat: no-repeat;
   background-position: center;
-}
-
-.profile-link__icon {
-  width: 10px;
-  height: 11px;
-  vertical-align: middle;
 }
 
 @media screen and (max-width: 768px) {
