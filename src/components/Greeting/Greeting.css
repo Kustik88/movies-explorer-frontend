@@ -19,3 +19,21 @@
 .greeting__heading_position_center {
   text-align: center;
 }
+
+@media screen and (max-width: 820px) {
+  .greeting {
+    padding-top: 232px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .greeting {
+    width: calc(100% - 60px);
+    align-items: center;
+    padding-top: 56px;
+  }
+
+  .greeting__heading {
+    margin-top: 10px;
+  }
+}

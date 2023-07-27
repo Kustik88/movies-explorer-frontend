@@ -19,8 +19,8 @@ function App() {
   const location = useLocation()
   // const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [isLikedMoviesPage, setIsLikedMoviesPage] = useState(true)
-  const [isSmallScreen, setIsSmallScreen] = useState(false)
-  const [isMiddleScreen, setIsMiddleScreen] = useState(false)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
+  const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [numberOfCards, setNumberOfCards] = useState(0)
 
@@ -80,6 +80,7 @@ function App() {
           <SavedMovies
             moviesList={moviesSavingList}
             isUserMovies={isLikedMoviesPage}
+            isSmallScreen={isSmallScreen}
           />} />
         <Route
           path='/sign-in' element={

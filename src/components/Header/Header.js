@@ -8,7 +8,7 @@ import ProfileLink from '../ProfileLink/ProfileLink'
 
 function Header({ isLoggedIn, isMiddleScreen, onIconMenuClick }) {
   return (
-    <header className={`header ${!isLoggedIn && 'header_theme_dark-blue'}`}>
+    <header className={`header${!isLoggedIn ? ' header_theme_dark-blue' : ''}`}>
       <LogoProject />
       {isLoggedIn
         ? isMiddleScreen

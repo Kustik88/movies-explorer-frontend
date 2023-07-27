@@ -3,7 +3,6 @@ import '../App/App.css'
 import Content from '../Content/Content'
 import Greeting from '../Greeting/Greeting'
 import AuthForm from '../AuthForm/AuthForm'
-import LogoProject from '../LogoProject/LogoProject'
 
 function Register({ greetingText, formName, isRegisterPathName }) {
   return (
