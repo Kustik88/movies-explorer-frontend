@@ -1,26 +1,34 @@
+@keyframes show-drop-down-menu {
+  to {
+    right: 0;
+  }
+}
+
 .drop-down-menu {
   width: 100%;
   height: 100vh;
+  top: 0;
+  right: -100%;
   background-color: transparent;
   position: absolute;
   display: none;
   z-index: 1;
+  animation: show-drop-down-menu .3s ease-in-out forwards alternate;
 }
 
 .drop-down-menu::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100%;
   height: 100%;
-  transition: opacity 1s ease-in-out;
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 1;
   z-index: 0;
 }
 
-.drop-down-menu_visible {
+.drop-down-menu_opened {
   display: block;
 }
 
