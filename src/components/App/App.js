@@ -16,9 +16,6 @@ import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
 
 function App() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const pathName = location.pathname
   // const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -26,6 +23,9 @@ function App() {
   const [numberOfCards, setNumberOfCards] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+  const pathName = location.pathname
 
   useEffect(() => {
     function handleResize() {
