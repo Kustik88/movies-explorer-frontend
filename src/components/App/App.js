@@ -24,7 +24,7 @@ function App() {
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [numberOfCards, setNumberOfCards] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   useEffect(() => {
@@ -52,12 +52,12 @@ function App() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
   }
 
-  const showHeader = (pathName) => ['/', '/movies', '/saved-movies', '/profile'].includes(pathName)
-  const showFooter = (pathName) => ['/', '/movies', '/saved-movies'].includes(pathName)
-  const togleHeaderTheme = (pathName) => '/'.includes(pathName)
-  const isRegisterPathName = (pathName) => '/sign-up'.includes(pathName)
-  const isProfilePathName = (pathName) => '/profile'.includes(pathName)
-  const isSavedMoviesPage = (pathName) => '/saved-movies'.includes(pathName)
+  const showHeader = (path) => ['/', '/movies', '/saved-movies', '/profile'].includes(path)
+  const showFooter = (path) => ['/', '/movies', '/saved-movies'].includes(path)
+  const togleHeaderTheme = (path) => '/'.includes(path)
+  const isRegisterPathName = (path) => '/sign-up'.includes(path)
+  const isProfilePathName = (path) => '/profile'.includes(path)
+  const isSavedMoviesPage = (path) => '/saved-movies'.includes(path)
   const returnPreviousPage = () => { navigate(-1) }
 
   if (isLoading) {

@@ -6,6 +6,7 @@ function MoviesCardList({ moviesList, moviesSavingList, numberOfCards, pathName 
   const isSavedMoviesPage = '/saved-movies'.includes(pathName)
 
   const renderList = moviesList.slice(0, numberOfCards)
+
   return (
     <ul className='movies-list'>
       {isSavedMoviesPage
