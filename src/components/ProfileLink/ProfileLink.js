@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import './ProfileLink.css'
 import '../App/App.css'
-import profileIcon from '../../images/profile-icon.svg'
 
 function Profile() {
   return (

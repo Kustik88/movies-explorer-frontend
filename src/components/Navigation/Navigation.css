@@ -15,10 +15,6 @@
   margin: 0;
 }
 
-.navigation__links_placement_column {
-  flex-direction: column;
-}
-
 .navigation__link {
   max-width: fit-content;
   padding: 0;
@@ -34,13 +30,14 @@
   font-weight: 500;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 820px) {
   .navigation {
-    margin: 28px auto 0;
+    margin: 160px auto 0;
   }
 
   .navigation__links {
     gap: 28px;
+    flex-direction: column;
   }
 
   .navigation__link {
@@ -58,5 +55,15 @@
     position: absolute;
     bottom: -8px;
     left: 0;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .navigation {
+    margin-top: 145px;
+  }
+
+  .navigation__links {
+    gap: 24px;
   }
 }

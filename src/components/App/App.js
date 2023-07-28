@@ -17,12 +17,13 @@ import { moviesSavingList } from '../../constants/moviesSavingList'
 function App() {
   const navigate = useNavigate()
   const location = useLocation()
+  const pathName = location.pathname
   // const [isLoggedIn, setIsLoggedIn] = useState(true)
-  const [isLikedMoviesPage, setIsLikedMoviesPage] = useState(true)
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [numberOfCards, setNumberOfCards] = useState(0)
+
 
   useEffect(() => {
     function handleResize() {
@@ -54,17 +55,23 @@ function App() {
   const togleHeaderTheme = (pathName) => '/'.includes(pathName)
   const isRegisterPathName = (pathName) => '/sign-up'.includes(pathName)
   const isProfilePathName = (pathName) => '/profile'.includes(pathName)
-
+  const isSavedMoviesPage = (pathName) => '/saved-movies'.includes(pathName)
   const returnPreviousPage = () => { navigate(-1) }
 
   return (
     <div className="App">
-      <DropDownMenu isOpen={isdropDownMenuOpen} onClose={handleDropDownMenuClick} />
-      {showHeader(location.pathname)
+      <DropDownMenu
+        isOpen={isdropDownMenuOpen}
+        isMiddleScreen={isMiddleScreen || isSmallScreen}
+        onClose={handleDropDownMenuClick}
+        pathName={pathName}
+      />
+      {showHeader(pathName)
         && <Header
-          isLoggedIn={!togleHeaderTheme(location.pathname)}
+          isLoggedIn={!togleHeaderTheme(pathName)}
           isMiddleScreen={isMiddleScreen || isSmallScreen}
-          onIconMenuClick={handleDropDownMenuClick} />}
+          onIconMenuClick={handleDropDownMenuClick}
+          pathName={pathName} />}
 
       <Routes>
         <Route path='/' element={<Main />} />
@@ -72,22 +79,23 @@ function App() {
           <Movies
             moviesList={moviesList}
             moviesSavingList={moviesSavingList}
-            isUserMovies={isLikedMoviesPage}
             numberOfCards={numberOfCards}
             isSmallScreen={isSmallScreen}
+            pathName={pathName}
           />} />
         <Route path='/saved-movies' element={
           <SavedMovies
             moviesList={moviesSavingList}
-            isUserMovies={isLikedMoviesPage}
+            isSavedMoviesPage={isSavedMoviesPage}
             isSmallScreen={isSmallScreen}
+            pathName={pathName}
           />} />
         <Route
           path='/sign-in' element={
             <Login
               greetingText='Рады видеть'
               formName='login'
-              isRegisterPathName={isRegisterPathName(location.pathname)}
+              isRegisterPathName={isRegisterPathName(pathName)}
             />} />
         <Route
           path='/sign-up'
@@ -95,7 +103,7 @@ function App() {
             <Register
               greetingText='Добро пожаловать'
               formName='register'
-              isRegisterPathName={isRegisterPathName(location.pathname)}
+              isRegisterPathName={isRegisterPathName(pathName)}
             />} />
         <Route path='/profile' element={
           <Profile
@@ -105,7 +113,7 @@ function App() {
         />
         <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
       </Routes>
-      {showFooter(location.pathname) && <Footer />}
+      {showFooter(pathName) && <Footer />}
     </div>
   )
 }

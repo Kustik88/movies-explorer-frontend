@@ -3,11 +3,14 @@ import SearchForm from '../SearchForm/SearchForm'
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import SavedDevider from '../SavedDevider/SavedDevider'
 
-function SavedMovies({ moviesList, isUserMovies, isSmallScreen }) {
+function SavedMovies({ moviesList, isSavedMoviesPage, isSmallScreen, pathName }) {
   return (
     <Content>
       <SearchForm isSmallScreen={isSmallScreen} />
-      <MoviesCardList moviesList={moviesList} isUserMovies={isUserMovies} />
+      <MoviesCardList
+        moviesList={moviesList}
+        isSavedMoviesPage={isSavedMoviesPage}
+        pathName={pathName} />
       <SavedDevider />
     </Content>
   )

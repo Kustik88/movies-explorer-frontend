@@ -26,6 +26,7 @@
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 1;
   z-index: 0;
+  cursor: pointer;
 }
 
 .drop-down-menu_opened {
@@ -33,7 +34,7 @@
 }
 
 .drop-down-menu__content {
-  width: 520px;
+  width: 67.7%;
   height: 100%;
   background-color: #202020;
   display: flex;
@@ -64,4 +65,19 @@
   font-weight: 500;
   line-height: 122%;
   color: #fff;
+}
+
+@media screen and (max-width: 425px) {
+  .drop-down-menu__content {
+    width: 100%;
+  }
+
+  .drop-down-menu__close-btn {
+    top: 15px;
+    right: 15px;
+  }
+
+  .drop-down-menu__title {
+    margin-top: 145px;
+  }
 }

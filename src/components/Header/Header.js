@@ -6,7 +6,7 @@ import LogoProject from '../LogoProject/LogoProject'
 import Navigation from '../Navigation/Navigation'
 import ProfileLink from '../ProfileLink/ProfileLink'
 
-function Header({ isLoggedIn, isMiddleScreen, onIconMenuClick }) {
+function Header({ isLoggedIn, isMiddleScreen, onIconMenuClick, pathName }) {
   return (
     <header className={`header${!isLoggedIn ? ' header_theme_dark-blue' : ''}`}>
       <LogoProject />
@@ -14,7 +14,7 @@ function Header({ isLoggedIn, isMiddleScreen, onIconMenuClick }) {
         ? isMiddleScreen
           ? <button type='button' aria-label='открыть меню' className='btn header__menu-btn' onClick={onIconMenuClick} />
           : <>
-            <Navigation />
+            <Navigation pathName={pathName} />
             <ProfileLink />
           </>
         : <div className='header__links'>

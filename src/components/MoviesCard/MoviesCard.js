@@ -3,10 +3,10 @@ import './MoviesCard.css'
 import savingIcon from '../../images/saving-icon.svg'
 
 
-function MoviesCard({ card, isSaved, isUserMovies }) {
+function MoviesCard({ card, isSaved, isSavedMoviesPage }) {
   return (
     <li className='card'>
-      {isUserMovies
+      {isSavedMoviesPage
         ? <button className='btn card__remove_btn' type='button' aria-label='удалить фильм' />
         : isSaved
           ? <img src={savingIcon} alt='сохранено' className='card__like-icon card__like-icon_active' />

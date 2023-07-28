@@ -28,8 +28,14 @@
   background-position: center;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 820px) {
   .profile-link {
     margin: 619px auto 0;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .profile-link {
+    margin-top: 440px;
   }
 }

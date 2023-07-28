@@ -2,13 +2,13 @@ import './DropDownMenu.css'
 import '../App/App.css'
 import Navigation from '../Navigation/Navigation'
 import ProfileLink from '../ProfileLink/ProfileLink'
-function DropDownMenu({ isOpen, onClose }) {
+
+function DropDownMenu({ isOpen, isMiddleScreen, onClose, pathName }) {
   return (
-    <section className={`drop-down-menu${isOpen ? ' drop-down-menu_opened' : ''}`}>
+    <section className={`drop-down-menu${isOpen && isMiddleScreen ? ' drop-down-menu_opened' : ''}`} onClick={onClose}>
       <div className='drop-down-menu__content'>
         <button type='button' aria-label='закрыть меню' className='btn drop-down-menu__close-btn' onClick={onClose} />
-        <h2 className='drop-down-menu__title'>Главная</h2>
-        <Navigation isDropDownMenu={isOpen} />
+        <Navigation isMiddleScreen={isMiddleScreen} pathName={pathName} />
         <ProfileLink />
       </div>
     </section>
