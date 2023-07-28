@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
 import DropDownMenu from '../DropDownMenu/DropDownMenu'
 import Header from '../Header/Header'
