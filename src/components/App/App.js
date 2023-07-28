@@ -11,6 +11,7 @@ import Register from '../Register/Register'
 import Profile from '../Profile/Profile'
 import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
+import Preloader from '../Preloader/Preloader'
 import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
 
@@ -23,6 +24,7 @@ function App() {
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [numberOfCards, setNumberOfCards] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
 
   useEffect(() => {
@@ -57,6 +59,10 @@ function App() {
   const isProfilePathName = (pathName) => '/profile'.includes(pathName)
   const isSavedMoviesPage = (pathName) => '/saved-movies'.includes(pathName)
   const returnPreviousPage = () => { navigate(-1) }
+
+  if (isLoading) {
+    return <Preloader />
+  }
 
   return (
     <div className="App">
