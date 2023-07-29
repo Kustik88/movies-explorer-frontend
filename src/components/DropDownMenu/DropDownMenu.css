@@ -10,7 +10,7 @@
   top: 0;
   right: -100%;
   background-color: transparent;
-  position: absolute;
+  position: fixed;
   display: none;
   z-index: 1;
   animation: show-drop-down-menu .3s ease-in-out forwards alternate;
