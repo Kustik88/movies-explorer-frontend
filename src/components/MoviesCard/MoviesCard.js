@@ -7,7 +7,7 @@ function MoviesCard({ card, isSaved, isSavedMoviesPage }) {
       {isSavedMoviesPage
         ? <button className='btn card__remove_btn' type='button' aria-label='удалить фильм' />
         : isSaved
-          ? <div className='card__like-icon card__like-icon_active' />
+          ? <button className='btn card__like-btn card__like-btn_active' />
           : <button className='btn card__save-btn' type='button' aria-label='сохранить фильм'>Сохранить</button>
       }
 
