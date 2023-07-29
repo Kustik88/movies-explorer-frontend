@@ -1,15 +1,15 @@
-import thirtyThree from '../images/movies-list/33 words.jpg'
+import thirtyThree from '../images/movies-list/33_words.jpg'
 import oneHundred from '../images/movies-list/100.jpg'
 import banksi from '../images/movies-list/Banksi.jpg'
 import baskia from '../images/movies-list/Baskia.png'
 import bookSellers from '../images/movies-list/Booksellers.png'
-import jump from '../images/movies-list/gather up before the jump.jpg'
-import gimmeDanger from '../images/movies-list/Gimme danger.jpg'
+import jump from '../images/movies-list/gather_up_before_the_jump.jpg'
+import gimmeDanger from '../images/movies-list/Gimme_danger.jpg'
 import jenis from '../images/movies-list/Jenis.jpg'
-import waves from '../images/movies-list/on the waves.jpg'
-import harvey from '../images/movies-list/PJ Harvey.jpg'
-import runIsFree from '../images/movies-list/Run is free.jpg'
-import thinkAboutGermany from '../images/movies-list/When I think about Germany.jpg'
+import waves from '../images/movies-list/on_the_waves.jpg'
+import harvey from '../images/movies-list/PJ_Harvey.jpg'
+import runIsFree from '../images/movies-list/Run_is_free.jpg'
+import thinkAboutGermany from '../images/movies-list/When_I_think_about_Germany.jpg'
 
 export const moviesList =
   [

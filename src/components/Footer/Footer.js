@@ -14,7 +14,7 @@ function Footer({ isSmallScreen }) {
               <Link
                 to='https://practicum.yandex.ru/'
                 className='link footer__link'
-                target='blank'>
+                target='_blank'>
                 Яндекс.Практикум
               </Link>
             </li>
@@ -22,7 +22,7 @@ function Footer({ isSmallScreen }) {
               <Link
                 to='https://github.com/'
                 className='link footer__link'
-                target='blank'>
+                target='_blank'>
                 Github
               </Link>
             </li>

@@ -1,4 +1,4 @@
-import thirtyThree from '../images/movies-list/33 words.jpg'
+import thirtyThree from '../images/movies-list/33_words.jpg'
 import oneHundred from '../images/movies-list/100.jpg'
 import banksi from '../images/movies-list/Banksi.jpg'
 

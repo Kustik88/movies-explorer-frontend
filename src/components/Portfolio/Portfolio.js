@@ -11,7 +11,7 @@ function Portfolio() {
           <Link
             className='link portfolio__link'
             to='https://github.com/Kustik88/how-to-learn'
-            target='blank'>
+            target='_blank'>
             <h4 className='portfolio__link-heading'>Статичный сайт</h4>
             <p className='portfolio__link-icon'>↗</p>
           </Link>
@@ -20,7 +20,7 @@ function Portfolio() {
           <Link
             className='link portfolio__link'
             to='https://github.com/Kustik88/russian-travel'
-            target='blank'>
+            target='_blank'>
             <h4 className='portfolio__link-heading'>Адаптивный сайт</h4>
             <p className='portfolio__link-icon'>↗</p>
           </Link>
@@ -29,7 +29,7 @@ function Portfolio() {
           <Link
             className='link portfolio__link'
             to='https://github.com/Kustik88/react-mesto-api-full-gha'
-            target='blank'>
+            target='_blank'>
             <h4 className='portfolio__link-heading'>Одностраничное приложение</h4>
             <p className='portfolio__link-icon'>↗</p>
           </Link>

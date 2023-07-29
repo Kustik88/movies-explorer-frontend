@@ -20,7 +20,12 @@ function AboutMe() {
             поняла, что мне это не нравится. Решила попробовать себя в веб-разработке. Сейчас работаю
             над сайтом школы плаванания 'Жемчужинка'.
           </p>
-          <Link className='link about-me__url' to='https://github.com/Kustik88'>Github</Link>
+          <Link
+            className='link about-me__url'
+            to='https://github.com/Kustik88'
+            target='_blank'
+          >Github
+          </Link>
         </div>
         <img className='about-me__avatar' src={avatar} alt='аватар' />
       </div>
