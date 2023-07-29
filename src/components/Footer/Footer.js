@@ -11,12 +11,18 @@ function Footer({ isSmallScreen }) {
         <nav className='footer__nav-bar'>
           <ul className='footer__links'>
             <li>
-              <Link to='https://practicum.yandex.ru/' className='link footer__link'>
+              <Link
+                to='https://practicum.yandex.ru/'
+                className='link footer__link'
+                target='blank'>
                 Яндекс.Практикум
               </Link>
             </li>
             <li>
-              <Link to='https://github.com/' className='link footer__link'>
+              <Link
+                to='https://github.com/'
+                className='link footer__link'
+                target='blank'>
                 Github
               </Link>
             </li>

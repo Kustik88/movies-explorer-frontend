@@ -2,11 +2,6 @@
   width: 100%;
   padding: 101px 0 114px;
   box-sizing: border-box;
-  margin: 0;
-  list-style-type: none;
-  display: flex;
-  gap: 30px;
-  flex-direction: column;
 }
 
 .portfolio__title {
@@ -14,13 +9,21 @@
   font-weight: 400;
   line-height: 111%;
   color: #8B8B8B;
-  margin: 0 0 20px;
+  margin: 0;
+}
+
+.portfolio__items {
+  width: 100%;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  padding: 50px 0 0;
 }
 
 .portfolio__item {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
   margin: 0;
   position: relative;
 }
@@ -35,22 +38,25 @@
   left: 0;
 }
 
-.portfolio__heading {
-  font-size: 30px;
-  font-weight: 400;
-  line-height: 167%;
-  max-width: 880px;
-  color: #fff;
-  letter-spacing: -1.12px;
-  margin: 0;
-}
-
 .portfolio__link {
   font-size: 30px;
   font-weight: 400;
-  line-height: 200%;
+  letter-spacing: -1.8px;
   color: #fff;
   text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.portfolio__link-heading {
+  line-height: 167%;
+  margin: 0;
+}
+
+
+.portfolio__link-icon {
+  line-height: 200%;
+  margin: 0;
 }
 
 @media screen and (max-width: 820px) {
@@ -59,9 +65,17 @@
     padding-bottom: 80px;
   }
 
-  .portfolio__heading {
+  .portfolio__link {
     font-size: 28px;
+    letter-spacing: -1.6px;
+  }
+
+  .portfolio__link-heading {
     line-height: 179%
+  }
+
+  .portfolio__link-icon {
+    line-height: 214%
   }
 }
 
@@ -78,19 +92,27 @@
     margin: 0;
   }
 
+  .portfolio__items {
+    padding-top: 40px;
+    gap: 40px;
+  }
+
   .portfolio__item:not(.portfolio__item_underline_none)::after {
     bottom: -19px;
   }
 
-  .portfolio__heading {
-    font-size: 18px;
-    line-height: 156%;
-    letter-spacing: -.72px;
-  }
-
   .portfolio__link {
     font-size: 18px;
-    line-height: 156%;
-    letter-spacing: -.72px;
+    letter-spacing: -1.12px;
   }
+
+  .portfolio__link-heading {
+    line-height: 156%;
+  }
+
+  .portfolio__link-icon {
+    line-height: 156%;
+  }
+
+
 }
