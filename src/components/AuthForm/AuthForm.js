@@ -1,8 +1,22 @@
 import { Link } from 'react-router-dom'
+import { useState } from "react"
 import './AuthForm.css'
 import '../App/App.css'
 
 function AuthForm({ formName, isRegisterPathName }) {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    password: '',
+  })
+
+  function handleChange(e) {
+    const input = e.target
+    setFormValues({
+      ...formValues,
+      [input.name]: input.value
+    })
+  }
 
   const userNameFormId = `user-name-${formName}`
   const emailFormId = `email-${formName}`
@@ -22,16 +36,17 @@ function AuthForm({ formName, isRegisterPathName }) {
     }
 
   return (
-    <form className="auth-form">
+    <form className="auth-form" >
       <div className='auth-form__input-container'>
         {isRegisterPathName &&
           <>
             <label htmlFor={`user-name-${formName}`} className="auth-form__label">Имя</label>
             <input
               type="text"
-              value='Виталий'
+              value={formValues.name}
               id={userNameFormId}
               name="name"
+              onChange={handleChange}
               className="auth-form__input"
               placeholder="Введите имя"
               minLength="2"
@@ -48,8 +63,9 @@ function AuthForm({ formName, isRegisterPathName }) {
         <label htmlFor={`email-${formName}`} className="auth-form__label">E-mail</label>
         <input
           type="email"
-          value='pochta@yandex.ru'
+          value={formValues.email}
           id={emailFormId}
+          onChange={handleChange}
           name="email"
           className="auth-form__input"
           placeholder="Введите почту"
@@ -64,9 +80,10 @@ function AuthForm({ formName, isRegisterPathName }) {
         <label htmlFor={`password-${formName}`} className="auth-form__label">Пароль</label>
         <input
           type="password"
-          value='какой-то пароль'
+          value={formValues.password}
           id={passwordFormId}
           name="password"
+          onChange={handleChange}
           className="auth-form__input"
           placeholder="Введите пароль"
           minLength="7"

@@ -1,17 +1,32 @@
 import './EditUserForm.css'
 import '../App/App.css'
+import { useState } from "react"
 import { Link } from 'react-router-dom'
 
 function EditUserForm() {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+  })
+
+  function handleChange(e) {
+    const input = e.target
+    setFormValues({
+      ...formValues,
+      [input.name]: input.value
+    })
+  }
+
   return (
     <form className="edit-user-form">
       <div className="edit-user-form__input-container">
         <label htmlFor="name-edit-user-form" className="edit-user-form__label">Имя</label>
         <input
           type="text"
-          value='Виталий'
+          value={formValues.name}
           id='name-edit-user-form'
           name="name"
+          onChange={handleChange}
           className="edit-user-form__input"
           placeholder="Введите имя"
           minLength="2"
@@ -20,9 +35,10 @@ function EditUserForm() {
         <label htmlFor="email-edit-user-form" className="edit-user-form__label">E-mail</label>
         <input
           type="email"
-          value='pochta@yandex.ru'
+          value={formValues.email}
           id='email-edit-user-form'
           name="email"
+          onChange={handleChange}
           className="edit-user-form__input"
           placeholder="Введите почту"
           required />
