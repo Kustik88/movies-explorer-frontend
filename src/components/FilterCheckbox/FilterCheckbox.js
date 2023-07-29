@@ -2,7 +2,7 @@ import './FilterCheckbox.css'
 
 function FilterCheckbox() {
   return (
-    <form className='filter-checkbox' noValidate>
+    <form className='filter-checkbox'>
       <input
         type='radio'
         name='short-movie'

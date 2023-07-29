@@ -74,7 +74,7 @@ function App() {
       />
       {showHeader(pathName)
         && <Header
-          isLoggedIn={!togleHeaderTheme(pathName)}
+          isLoggedIn={!togleHeaderTheme(pathName)} /*здесь вообще залогинен или нет, но пока просто проверяем маршрут чтобы установить тему*/
           isMiddleScreen={isMiddleScreen || isSmallScreen}
           onIconMenuClick={handleDropDownMenuClick}
           pathName={pathName} />}
