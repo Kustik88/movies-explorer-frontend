@@ -1,0 +1,99 @@
+.edit-user-form {
+  width: 410px;
+  padding: 0;
+  margin: 125px auto 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-user-form__input-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 141px 1fr;
+  row-gap: 19px;
+  position: relative;
+}
+
+
+.edit-user-form__input-container::after {
+  width: 100%;
+  content: '';
+  position: absolute;
+  border-bottom: 1px solid #424242;
+  top: 30px;
+  left: 0;
+}
+
+.edit-user-form__input {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 118%;
+  background-color: inherit;
+  border: 0;
+  padding: 0 0 17px 0;
+  color: #FFF;
+  text-align: right;
+}
+
+.edit-user-form__input:focus {
+  outline: none;
+}
+
+.edit-user-form__label {
+  max-width: 141px;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 118%;
+}
+
+.edit-user-form__sbt-button {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 123%;
+  color: #FFF;
+  background-color: inherit;
+  border: 0;
+  width: fit-content;
+  padding: 0;
+  margin: 204px auto 0;
+}
+
+.edit-user-form__logout-link {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 123%;
+  color: #EE3465;
+  text-decoration: none;
+  margin: 15px auto 0;
+}
+
+@media screen and (max-width: 820px) {
+  .edit-user-form {
+    margin-top: 100px;
+  }
+
+  .edit-user-form__sbt-button {
+    margin-top: 195px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .edit-user-form {
+    width: calc(100% - 60px);
+    margin-top: 84px;
+  }
+
+  .edit-user-form__sbt-button {
+    margin-top: 363px;
+    font-size: 12px;
+    line-height: 125%;
+  }
+
+  .edit-user-form__logout-link {
+    font-size: 12px;
+    line-height: 125%;
+  }
+}

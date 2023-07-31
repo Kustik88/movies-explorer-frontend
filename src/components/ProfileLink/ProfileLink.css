@@ -1,0 +1,41 @@
+.profile-link {
+  width: fit-content;
+  display: flex;
+  column-gap: 13px;
+  justify-content: space-between;
+  margin: 0;
+  text-decoration: none;
+}
+
+.profile-link__account {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 114%;
+  color: #fff;
+  margin: 10px 0 0;
+}
+
+.profile-link__icon {
+  width: 30px;
+  height: 30px;
+  background-color: #313131;
+  border-radius: 6px;
+  text-align: center;
+  line-height: 30px;
+  margin: 2px auto 0;
+  background-image: url(../../images/profile-icon.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media screen and (max-width: 820px) {
+  .profile-link {
+    margin: 619px auto 0;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .profile-link {
+    margin-top: 440px;
+  }
+}
