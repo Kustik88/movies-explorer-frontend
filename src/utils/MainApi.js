@@ -1,15 +1,6 @@
 import { BASE_URL_USER_API } from "../constants/baseUrl"
 import { makeRequest } from "./makeRequest"
 
-export function getCurrentsUserData(token) {
-  return makeRequest(
-    BASE_URL_USER_API,
-    '/users/me',
-    'GET',
-    null,
-    token)
-}
-
 export function getCurrentsUserMovies(token) {
   return makeRequest(
     BASE_URL_USER_API,

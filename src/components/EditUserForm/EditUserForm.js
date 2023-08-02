@@ -1,20 +1,25 @@
 import './EditUserForm.css'
 import '../App/App.css'
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import { Link } from 'react-router-dom'
+import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 
 function EditUserForm() {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
-  })
+  const currentUser = useContext(CurrentUserContext)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
 
-  function handleChange(e) {
-    const input = e.target
-    setFormValues({
-      ...formValues,
-      [input.name]: input.value
-    })
+  useEffect(() => {
+    setName(currentUser.name)
+    setEmail(currentUser.email)
+  }, [currentUser])
+
+  function handleNameChange(e) {
+    setName(e.target.value)
+  }
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value)
   }
 
   return (
@@ -23,10 +28,10 @@ function EditUserForm() {
         <label htmlFor="name-edit-user-form" className="edit-user-form__label">Имя</label>
         <input
           type="text"
-          value={formValues.name}
+          value={name || ''}
           id='name-edit-user-form'
           name="name"
-          onChange={handleChange}
+          onChange={handleNameChange}
           className="edit-user-form__input"
           placeholder="Введите имя"
           minLength="2"
@@ -35,10 +40,10 @@ function EditUserForm() {
         <label htmlFor="email-edit-user-form" className="edit-user-form__label">E-mail</label>
         <input
           type="email"
-          value={formValues.email}
+          value={email || ''}
           id='email-edit-user-form'
           name="email"
-          onChange={handleChange}
+          onChange={handleEmailChange}
           className="edit-user-form__input"
           placeholder="Введите почту"
           required />

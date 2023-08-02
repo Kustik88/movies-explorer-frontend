@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
+import Cookies from 'js-cookie'
 import DropDownMenu from '../DropDownMenu/DropDownMenu'
 import Header from '../Header/Header'
 import Main from '../Main/Main'
@@ -12,20 +13,56 @@ import Profile from '../Profile/Profile'
 import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
 import Preloader from '../Preloader/Preloader'
+import * as AuthApi from '../../utils/AuthApi'
+import * as MainApi from '../../utils/MainApi'
+import * as MoviesApi from '../../utils/MoviesApi'
+import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [currentUser, setCurrentUser] = useState({})
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [numberOfCards, setNumberOfCards] = useState(0)
+  const [movies, setMovies] = useState([])
+  const [token, setToken] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
   const location = useLocation()
   const pathName = location.pathname
+
+  useEffect(() => {
+    const jwt = Cookies.get('jwt')
+    jwt && setToken(jwt)
+  }, [])
+
+  useEffect(() => {
+    if (!token) {
+      setIsLoading(false)
+      return
+    }
+    AuthApi.getCurrentUserData(token)
+      .then(res => {
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
+        })
+        setIsLoggedIn(true)
+        navigate('/movies')
+      })
+      .catch(err => displayError(err))
+      .finally(() => setIsLoading(false))
+  }, [token, navigate])
+
+  useEffect(() => {
+    MoviesApi.getMovies()
+      .then(dataMovies => setMovies(dataMovies))
+      .catch(err => displayError(err))
+  }, [token])
 
   useEffect(() => {
     function handleResize() {
@@ -36,7 +73,7 @@ function App() {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (isSmallScreen) {
@@ -47,6 +84,10 @@ function App() {
       setNumberOfCards(12)
     }
   }, [isSmallScreen, isMiddleScreen])
+
+  function displayError(err) {
+    console.log(err)
+  }
 
   function handleDropDownMenuClick() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
@@ -65,62 +106,67 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <DropDownMenu
-        isOpen={isdropDownMenuOpen}
-        isMiddleScreen={isMiddleScreen || isSmallScreen}
-        onClose={handleDropDownMenuClick}
-        pathName={pathName}
-      />
-      {showHeader(pathName)
-        && <Header
-          isLoggedIn={!togleHeaderTheme(pathName)} /*здесь вообще залогинен или нет, но пока просто проверяем маршрут чтобы установить тему*/
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="App">
+        <DropDownMenu
+          isOpen={isdropDownMenuOpen}
           isMiddleScreen={isMiddleScreen || isSmallScreen}
-          onIconMenuClick={handleDropDownMenuClick}
-          pathName={pathName} />}
-
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/movies' element={
-          <Movies
-            moviesList={moviesList}
-            moviesSavingList={moviesSavingList}
-            numberOfCards={numberOfCards}
-            isSmallScreen={isSmallScreen}
-            pathName={pathName}
-          />} />
-        <Route path='/saved-movies' element={
-          <SavedMovies
-            moviesList={moviesSavingList}
-            isSavedMoviesPage={isSavedMoviesPage}
-            isSmallScreen={isSmallScreen}
-            pathName={pathName}
-          />} />
-        <Route
-          path='/sign-in' element={
-            <Login
-              greetingText='Рады видеть'
-              formName='login'
-              isRegisterPathName={isRegisterPathName(pathName)}
-            />} />
-        <Route
-          path='/sign-up'
-          element={
-            <Register
-              greetingText='Добро пожаловать'
-              formName='register'
-              isRegisterPathName={isRegisterPathName(pathName)}
-            />} />
-        <Route path='/profile' element={
-          <Profile
-            greetingText='Привет, Виталий'
-            isProfilePathName={isProfilePathName}
-          />}
+          onClose={handleDropDownMenuClick}
+          pathName={pathName}
         />
-        <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
-      </Routes>
-      {showFooter(pathName) && <Footer />}
-    </div>
+        {showHeader(pathName)
+          && <Header
+            isLoggedIn={!togleHeaderTheme(pathName)} /*здесь вообще залогинен или нет, но пока просто проверяем маршрут чтобы установить тему*/
+            isMiddleScreen={isMiddleScreen || isSmallScreen}
+            onIconMenuClick={handleDropDownMenuClick}
+            pathName={pathName} />}
+
+        <Routes>
+          <Route path='/' element={<Main />} />
+
+          <Route path='/movies' element={
+            <Movies
+              moviesList={movies}
+              moviesSavingList={moviesSavingList}
+              numberOfCards={numberOfCards}
+              isSmallScreen={isSmallScreen}
+              pathName={pathName}
+            />} />
+          <Route path='/saved-movies' element={
+            <SavedMovies
+              moviesList={moviesSavingList}
+              isSavedMoviesPage={isSavedMoviesPage}
+              isSmallScreen={isSmallScreen}
+              pathName={pathName}
+            />} />\
+          <Route path='/profile' element={
+            <Profile
+              greetingText={`Привет, ${currentUser.name}`}
+              isProfilePathName={isProfilePathName}
+            />}
+          />
+
+
+          <Route
+            path='/sign-in' element={
+              <Login
+                greetingText='Рады видеть'
+                formName='login'
+                isRegisterPathName={isRegisterPathName(pathName)}
+              />} />
+          <Route
+            path='/sign-up'
+            element={
+              <Register
+                greetingText='Добро пожаловать'
+                formName='register'
+                isRegisterPathName={isRegisterPathName(pathName)}
+              />} />
+          <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
+        </Routes>
+        {showFooter(pathName) && <Footer />}
+      </div>\
+    </CurrentUserContext.Provider>
   )
 }
 

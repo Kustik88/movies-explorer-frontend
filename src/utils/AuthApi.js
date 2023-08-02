@@ -25,3 +25,12 @@ export function authorize(email, password) {
     },
     '')
 }
+
+export function getCurrentUserData(token) {
+  return makeRequest(
+    BASE_URL_USER_API,
+    '/users/me',
+    'GET',
+    null,
+    token)
+}
