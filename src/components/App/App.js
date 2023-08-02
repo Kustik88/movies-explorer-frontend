@@ -89,6 +89,16 @@ function App() {
     console.log(err)
   }
 
+  function handleAddCardsToPage() {
+    if (isSmallScreen) {
+      setNumberOfCards(numberOfCards + 2)
+    } else if (isMiddleScreen) {
+      setNumberOfCards(numberOfCards + 2)
+    } else {
+      setNumberOfCards(numberOfCards + 3)
+    }
+  }
+
   function handleDropDownMenuClick() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
   }
@@ -131,6 +141,7 @@ function App() {
               numberOfCards={numberOfCards}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
+              onAdderMoviesClick={handleAddCardsToPage}
             />} />
           <Route path='/saved-movies' element={
             <SavedMovies

@@ -4,7 +4,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import AdderMovies from '../AdderMovies/AdderMovies'
 import NotFoundMovies from '../NotFoundMovies/NotFoundMovies'
 
-function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pathName }) {
+function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pathName, onAdderMoviesClick }) {
   return (
     <Content>
       <SearchForm isSmallScreen={isSmallScreen} />
@@ -15,7 +15,7 @@ function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pa
             moviesSavingList={moviesSavingList}
             numberOfCards={numberOfCards}
             pathName={pathName} />
-          <AdderMovies />
+          <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
         </>
         : <NotFoundMovies />
       }
