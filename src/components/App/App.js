@@ -15,6 +15,7 @@ import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
 import Preloader from '../Preloader/Preloader'
 import InfoToolTips from '../IngoToolTips/InfoToolTips'
+import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute'
 import * as AuthApi from '../../utils/AuthApi'
 import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
@@ -125,6 +126,10 @@ function App() {
     Cookies.remove('jwt')
     setToken('')
     setIsLoggedIn(false)
+    setCurrentUser({
+      name: '',
+      email: ''
+    })
   }
 
   function handleFilterShortMovies() {
@@ -153,7 +158,6 @@ function App() {
 
   const showHeader = (path) => ['/', '/movies', '/saved-movies', '/profile'].includes(path)
   const showFooter = (path) => ['/', '/movies', '/saved-movies'].includes(path)
-  const togleHeaderTheme = (path) => '/'.includes(path)
   const isRegisterPathName = (path) => '/sign-up'.includes(path)
   const isProfilePathName = (path) => '/profile'.includes(path)
   const isSavedMoviesPage = (path) => '/saved-movies'.includes(path)
@@ -179,7 +183,7 @@ function App() {
         />
         {showHeader(pathName)
           && <Header
-            isLoggedIn={!togleHeaderTheme(pathName)} /*здесь вообще залогинен или нет, но пока просто проверяем маршрут чтобы установить тему*/
+            isLoggedIn={isLoggedIn}
             isMiddleScreen={isMiddleScreen || isSmallScreen}
             onIconMenuClick={handleDropDownMenuClick}
             pathName={pathName} />}
@@ -187,7 +191,9 @@ function App() {
         <Routes>
           <Route path='/' element={<Main />} />
           <Route path='/movies' element={
-            <Movies
+            <ProtectedRouteElement
+              element={Movies}
+              isLoggedIn={isLoggedIn}
               moviesList={movies}
               moviesSavingList={moviesSavingList}
               numberOfCards={numberOfCards}
@@ -197,7 +203,9 @@ function App() {
               onShortMoviesFilterClick={handleFilterShortMovies}
             />} />
           <Route path='/saved-movies' element={
-            <SavedMovies
+            <ProtectedRouteElement
+              element={SavedMovies}
+              isLoggedIn={isLoggedIn}
               moviesList={moviesSavingList}
               isSavedMoviesPage={isSavedMoviesPage}
               isSmallScreen={isSmallScreen}
@@ -205,7 +213,9 @@ function App() {
               onShortMoviesFilterClick={handleFilterShortMovies}
             />} />
           <Route path='/profile' element={
-            <Profile
+            <ProtectedRouteElement
+              element={Profile}
+              isLoggedIn={isLoggedIn}
               greetingText={`Привет, ${currentUser.name}`}
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}

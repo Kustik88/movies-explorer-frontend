@@ -3,15 +3,14 @@ import '../App/App.css'
 import Content from "../Content/Content"
 import EditUserForm from '../EditUserForm/EditUserForm'
 import Greeting from '../Greeting/Greeting'
-import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 
-function Profile({ greetingText, isProfilePathName, logOut }) {
+function Profile({ greetingText, isProfilePathName, logOutUser }) {
   return (
     <Content>
       <Greeting
         greetingText={greetingText}
         isProfilePathName={isProfilePathName} />
-      <EditUserForm logout={logOut} />
+      <EditUserForm logOutUser={logOutUser} />
     </Content>
   )
 }

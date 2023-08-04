@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 
-function EditUserForm({ logOut }) {
+function EditUserForm({ logOutUser }) {
   const currentUser = useContext(CurrentUserContext)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -51,7 +51,7 @@ function EditUserForm({ logOut }) {
       <button type="submit" aria-label='редактировать профиль' className="btn edit-user-form__sbt-button">
         Редактировать
       </button>
-      <Link to='/sign-in' className="link edit-user-form__logout-link" onClick={logOut}>
+      <Link to='/sign-in' className="link edit-user-form__logout-link" onClick={logOutUser}>
         Выйти из аккаунта
       </Link>
     </form>
