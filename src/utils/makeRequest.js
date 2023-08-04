@@ -2,8 +2,8 @@ export function makeRequest(basePath, url, method, body, token) {
   const options = {
     method,
     headers: {
-      'Content-Type': 'application/json'
-    },
+      'Content-Type': 'application/json',
+    }
   }
 
   if (body) {

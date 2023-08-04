@@ -13,6 +13,7 @@ import Profile from '../Profile/Profile'
 import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
 import Preloader from '../Preloader/Preloader'
+import InfoToolTips from '../IngoToolTips/InfoToolTips'
 import * as AuthApi from '../../utils/AuthApi'
 import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
@@ -22,6 +23,8 @@ import { moviesSavingList } from '../../constants/moviesSavingList'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(true)
+  const [isSuccessSubmit, setIsSuccessSubmit] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -62,7 +65,7 @@ function App() {
     MoviesApi.getMovies()
       .then(dataMovies => setMovies(dataMovies))
       .catch(err => displayError(err))
-  }, [token])
+  }, [])
 
   useEffect(() => {
     function handleResize() {
@@ -89,6 +92,37 @@ function App() {
     console.log(err)
   }
 
+  function registerUser(name, email, password) {
+    AuthApi.register(name, email, password)
+      .then(() => {
+        setIsSuccessSubmit(true)
+        navigate('/sign-in')
+      })
+      .catch(err => {
+        setIsSuccessSubmit(false)
+        displayError(err)
+      })
+      .finally(() => {
+        setisInfoToolTipPopupOpen(true)
+      })
+  }
+
+  function loginUser(email, password) {
+    AuthApi.authorize(email, password)
+      .then(res => {
+        Cookies.set('jwt', res.jwt, { expires: 3 })
+        setToken(res.jwt)
+      })
+      .catch(err => {
+        displayError(err)
+      })
+  }
+
+  function handleFilterShortMovies() {
+    const shortMovies = movies.filter(movie => movie.duration <= 40)
+    setMovies(shortMovies)
+  }
+
   function handleAddCardsToPage() {
     if (isSmallScreen) {
       setNumberOfCards(numberOfCards + 2)
@@ -101,6 +135,11 @@ function App() {
 
   function handleDropDownMenuClick() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
+  }
+
+  function closeAllPopups() {
+    setIsdropDownMenuOpen(false)
+    setisInfoToolTipPopupOpen(false)
   }
 
   const showHeader = (path) => ['/', '/movies', '/saved-movies', '/profile'].includes(path)
@@ -121,8 +160,13 @@ function App() {
         <DropDownMenu
           isOpen={isdropDownMenuOpen}
           isMiddleScreen={isMiddleScreen || isSmallScreen}
-          onClose={handleDropDownMenuClick}
+          onClose={closeAllPopups}
           pathName={pathName}
+        />
+        <InfoToolTips
+          isOpen={isInfoToolTipPopupOpen}
+          isSuccessSubmit={isSuccessSubmit}
+          onClose={closeAllPopups}
         />
         {showHeader(pathName)
           && <Header
@@ -142,6 +186,7 @@ function App() {
               isSmallScreen={isSmallScreen}
               pathName={pathName}
               onAdderMoviesClick={handleAddCardsToPage}
+              onShortMoviesFilterClick={handleFilterShortMovies}
             />} />
           <Route path='/saved-movies' element={
             <SavedMovies
@@ -149,21 +194,21 @@ function App() {
               isSavedMoviesPage={isSavedMoviesPage}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
-            />} />\
+              onShortMoviesFilterClick={handleFilterShortMovies}
+            />} />
           <Route path='/profile' element={
             <Profile
               greetingText={`Привет, ${currentUser.name}`}
               isProfilePathName={isProfilePathName}
             />}
           />
-
-
           <Route
             path='/sign-in' element={
               <Login
                 greetingText='Рады видеть'
                 formName='login'
                 isRegisterPathName={isRegisterPathName(pathName)}
+                onLogin={loginUser}
               />} />
           <Route
             path='/sign-up'
@@ -172,11 +217,12 @@ function App() {
                 greetingText='Добро пожаловать'
                 formName='register'
                 isRegisterPathName={isRegisterPathName(pathName)}
+                onSignUp={registerUser}
               />} />
           <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
         {showFooter(pathName) && <Footer />}
-      </div>\
+      </div>
     </CurrentUserContext.Provider>
   )
 }

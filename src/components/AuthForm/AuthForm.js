@@ -3,12 +3,19 @@ import { useState } from "react"
 import './AuthForm.css'
 import '../App/App.css'
 
-function AuthForm({ formName, isRegisterPathName }) {
+function AuthForm({ formName, isRegisterPathName, onSubmit }) {
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
     password: '',
   })
+
+  function handleSubmit(evt) {
+    evt.preventDefault()
+    isRegisterPathName
+      ? onSubmit(formValues.name, formValues.email, formValues.password)
+      : onSubmit(formValues.email, formValues.password)
+  }
 
   function handleChange(e) {
     const input = e.target
@@ -36,7 +43,7 @@ function AuthForm({ formName, isRegisterPathName }) {
     }
 
   return (
-    <form className="auth-form" >
+    <form className="auth-form" onSubmit={handleSubmit} >
       <div className='auth-form__input-container'>
         {isRegisterPathName &&
           <>
