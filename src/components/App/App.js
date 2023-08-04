@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
@@ -23,8 +24,8 @@ import { moviesSavingList } from '../../constants/moviesSavingList'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(true)
-  const [isSuccessSubmit, setIsSuccessSubmit] = useState(true)
+  const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(false)
+  const [isSuccessSubmit, setIsSuccessSubmit] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -51,15 +52,15 @@ function App() {
     AuthApi.getCurrentUserData(token)
       .then(res => {
         setCurrentUser({
-          name: res.data.name,
-          email: res.data.email,
+          name: res.name,
+          email: res.email,
         })
         setIsLoggedIn(true)
         navigate('/movies')
       })
       .catch(err => displayError(err))
       .finally(() => setIsLoading(false))
-  }, [token, navigate])
+  }, [token])
 
   useEffect(() => {
     MoviesApi.getMovies()
@@ -110,12 +111,20 @@ function App() {
   function loginUser(email, password) {
     AuthApi.authorize(email, password)
       .then(res => {
-        Cookies.set('jwt', res.jwt, { expires: 3 })
-        setToken(res.jwt)
+        Cookies.set('jwt', res.token, { expires: 3 })
+        setToken(res.token)
       })
       .catch(err => {
+        setIsSuccessSubmit(false)
+        setisInfoToolTipPopupOpen(true)
         displayError(err)
       })
+  }
+
+  function logOutUser() {
+    Cookies.remove('jwt')
+    setToken('')
+    setIsLoggedIn(false)
   }
 
   function handleFilterShortMovies() {
@@ -177,7 +186,6 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Main />} />
-
           <Route path='/movies' element={
             <Movies
               moviesList={movies}
@@ -200,6 +208,7 @@ function App() {
             <Profile
               greetingText={`Привет, ${currentUser.name}`}
               isProfilePathName={isProfilePathName}
+              logOutUser={logOutUser}
             />}
           />
           <Route

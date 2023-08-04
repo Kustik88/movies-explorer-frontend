@@ -17,8 +17,8 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
       : onSubmit(formValues.email, formValues.password)
   }
 
-  function handleChange(e) {
-    const input = e.target
+  function handleChange(evt) {
+    const input = evt.target
     setFormValues({
       ...formValues,
       [input.name]: input.value

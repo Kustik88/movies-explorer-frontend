@@ -15,7 +15,10 @@ export function makeRequest(basePath, url, method, body, token) {
   }
 
   return fetch(`${basePath}${url}`, options)
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Error ${res.status}`))
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка ${res.status}`)
+    })
 }
