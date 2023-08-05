@@ -10,7 +10,7 @@ export function getCurrentsUserMovies(token) {
     token)
 }
 
-export function editCurrentUserData(name, email) {
+export function editCurrentUserData(name, email, token) {
   return makeRequest(
     BASE_URL_USER_API,
     '/users/me',
@@ -19,7 +19,7 @@ export function editCurrentUserData(name, email) {
       name,
       email
     },
-    ''
+    token
   )
 }
 

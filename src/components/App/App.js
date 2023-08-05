@@ -22,11 +22,16 @@ import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
+import {
+  SEARCH_MOVIES,
+  SEARCH_TEXT,
+  FILTER_CHECKBOX_STATE
+} from '../../constants/localStorage'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(false)
-  const [isSuccessSubmit, setIsSuccessSubmit] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState({ status: false, message: '' })
   const [currentUser, setCurrentUser] = useState({})
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -64,12 +69,6 @@ function App() {
   }, [token])
 
   useEffect(() => {
-    MoviesApi.getMovies()
-      .then(dataMovies => setMovies(dataMovies))
-      .catch(err => displayError(err))
-  }, [])
-
-  useEffect(() => {
     function handleResize() {
       setIsSmallScreen(window.innerWidth <= 425);
       setIsMiddleScreen(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -94,15 +93,25 @@ function App() {
     console.log(err)
   }
 
+  function showErrorToUser(err) {
+    const error = JSON.parse(err.message)
+    setSubmitStatus({
+      status: false,
+      message: error.message
+    })
+  }
+
   function registerUser(name, email, password) {
     AuthApi.register(name, email, password)
       .then(() => {
-        setIsSuccessSubmit(true)
+        setSubmitStatus({
+          status: true,
+          message: 'Вы успешно зарегестрировались!'
+        })
         navigate('/sign-in')
       })
       .catch(err => {
-        setIsSuccessSubmit(false)
-        displayError(err)
+        showErrorToUser(err)
       })
       .finally(() => {
         setisInfoToolTipPopupOpen(true)
@@ -116,9 +125,8 @@ function App() {
         setToken(res.token)
       })
       .catch(err => {
-        setIsSuccessSubmit(false)
+        showErrorToUser(err)
         setisInfoToolTipPopupOpen(true)
-        displayError(err)
       })
   }
 
@@ -130,6 +138,37 @@ function App() {
       name: '',
       email: ''
     })
+  }
+
+  function handleEditUserData(name, email) {
+    MainApi.editCurrentUserData(name, email, token)
+      .then(res => {
+        setSubmitStatus({
+          status: true,
+          message: 'Данные успешно измененены'
+        })
+        setCurrentUser({
+          name: res.name,
+          email: res.email,
+        })
+      })
+      .catch(err => showErrorToUser(err))
+      .finally(() => setisInfoToolTipPopupOpen(true))
+  }
+
+  function searchMovies(keyWord) {
+    setIsLoading(true)
+    localStorage.setItem(SEARCH_TEXT, keyWord)
+    MoviesApi.getMovies()
+      .then(moviesList => {
+        const keyWordToLowerCase = keyWord.toLowerCase()
+        const moviesListFilterKeyWord = moviesList.filter(movie => {
+          return movie.nameRU.toLowerCase().includes(keyWordToLowerCase) || movie.nameEN.toLowerCase().includes(keyWordToLowerCase)
+        })
+        setMovies(moviesListFilterKeyWord)
+      })
+      .catch(err => showErrorToUser(err))
+      .finally(() => setIsLoading(false))
   }
 
   function handleFilterShortMovies() {
@@ -177,9 +216,11 @@ function App() {
           pathName={pathName}
         />
         <InfoToolTips
-          isOpen={isInfoToolTipPopupOpen}
-          isSuccessSubmit={isSuccessSubmit}
+
+          isSuccessSubmit={submitStatus.status}
           onClose={closeAllPopups}
+          message={submitStatus.message}
+          isOpen={isInfoToolTipPopupOpen}
         />
         {showHeader(pathName)
           && <Header
@@ -199,6 +240,7 @@ function App() {
               numberOfCards={numberOfCards}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
+              onSearch={searchMovies}
               onAdderMoviesClick={handleAddCardsToPage}
               onShortMoviesFilterClick={handleFilterShortMovies}
             />} />
@@ -210,6 +252,7 @@ function App() {
               isSavedMoviesPage={isSavedMoviesPage}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
+              onSearch={searchMovies}
               onShortMoviesFilterClick={handleFilterShortMovies}
             />} />
           <Route path='/profile' element={
@@ -217,6 +260,7 @@ function App() {
               element={Profile}
               isLoggedIn={isLoggedIn}
               greetingText={`Привет, ${currentUser.name}`}
+              editUserData={handleEditUserData}
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
             />}

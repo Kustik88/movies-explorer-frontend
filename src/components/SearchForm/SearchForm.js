@@ -3,9 +3,9 @@ import '../App/App.css'
 import { useState } from "react"
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
-function SearchForm({ isSmallScreen }) {
+function SearchForm({ isSmallScreen, onSubmit }) {
   const [formValues, setFormValues] = useState({
-    nameRU: '',
+    movie: '',
   })
 
   function handleChange(e) {
@@ -16,13 +16,18 @@ function SearchForm({ isSmallScreen }) {
     })
   }
 
+  function handleSubmit(evt) {
+    evt.preventDefault()
+    onSubmit(formValues.movie)
+  }
+
   return (
-    <section className='search-form'>
-      <form className='search-form__form'>
+    <section className='search-form' >
+      <form className='search-form__form' onSubmit={handleSubmit}>
         {!isSmallScreen && <div className='search-form__search-icon' />}
         <input
           type="text"
-          value={formValues.nameRu}
+          value={formValues.name}
           className="search-form__input"
           name='movie'
           id='movie-input'

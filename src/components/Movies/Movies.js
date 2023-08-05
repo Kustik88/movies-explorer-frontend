@@ -3,11 +3,13 @@ import SearchForm from '../SearchForm/SearchForm'
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import AdderMovies from '../AdderMovies/AdderMovies'
 import NotFoundMovies from '../NotFoundMovies/NotFoundMovies'
+import Preloader from '../Preloader/Preloader'
+import SavedDevider from '../SavedDevider/SavedDevider'
 
-function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pathName, onAdderMoviesClick }) {
+function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pathName, onAdderMoviesClick, onSearch }) {
   return (
     <Content>
-      <SearchForm isSmallScreen={isSmallScreen} />
+      <SearchForm isSmallScreen={isSmallScreen} onSubmit={onSearch} />
       {moviesList.length !== 0
         ? <>
           <MoviesCardList
@@ -17,7 +19,7 @@ function Movies({ moviesList, moviesSavingList, numberOfCards, isSmallScreen, pa
             pathName={pathName} />
           <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
         </>
-        : <NotFoundMovies />
+        : localStorage.getItem('seachText') ? <NotFoundMovies /> : <SavedDevider />
       }
     </Content>
   )

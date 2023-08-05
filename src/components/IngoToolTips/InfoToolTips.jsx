@@ -4,7 +4,7 @@ import './InfoToolTips.css'
 import unionSuccess from '../../images/logo.svg'
 import unionFailed from '../../images/union-failed.svg'
 
-function InfoToolTips({ isOpen, isSuccessSubmit, onClose }) {
+function InfoToolTips({ isOpen, isSuccessSubmit, onClose, message }) {
   return (
     <section className={`popup ${isOpen ? 'popup_opened' : ""}`} onClick={onClose}>
       <div className='popup__container' >
@@ -13,9 +13,7 @@ function InfoToolTips({ isOpen, isSuccessSubmit, onClose }) {
           src={isSuccessSubmit ? unionSuccess : unionFailed}
           alt='соединение' />
         <h2 className="popup__heading">
-          {isSuccessSubmit
-            ? 'Вы успешно зарегистрировались!'
-            : 'Что-то пошло не так. Попробуйте еще раз!'}
+          {message}
         </h2>
       </div>
     </section>

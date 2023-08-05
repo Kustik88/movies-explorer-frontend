@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 
-function EditUserForm({ logOutUser }) {
+function EditUserForm({ onSubmit, logOutUser }) {
   const currentUser = useContext(CurrentUserContext)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -22,8 +22,13 @@ function EditUserForm({ logOutUser }) {
     setEmail(e.target.value)
   }
 
+  function handleSubmit(evt) {
+    evt.preventDefault()
+    onSubmit(name, email)
+  }
+
   return (
-    <form className="edit-user-form">
+    <form className="edit-user-form" onSubmit={handleSubmit}>
       <div className="edit-user-form__input-container">
         <label htmlFor="name-edit-user-form" className="edit-user-form__label">Имя</label>
         <input

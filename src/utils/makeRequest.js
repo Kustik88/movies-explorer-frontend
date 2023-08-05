@@ -19,6 +19,8 @@ export function makeRequest(basePath, url, method, body, token) {
       if (res.ok) {
         return res.json()
       }
-      return Promise.reject(`Ошибка ${res.status}`)
+      return res.text().then(err => {
+        throw new Error(err)
+      })
     })
 }

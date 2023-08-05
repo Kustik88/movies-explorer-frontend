@@ -4,13 +4,13 @@ import Content from "../Content/Content"
 import EditUserForm from '../EditUserForm/EditUserForm'
 import Greeting from '../Greeting/Greeting'
 
-function Profile({ greetingText, isProfilePathName, logOutUser }) {
+function Profile({ greetingText, isProfilePathName, editUserData, logOutUser }) {
   return (
     <Content>
       <Greeting
         greetingText={greetingText}
         isProfilePathName={isProfilePathName} />
-      <EditUserForm logOutUser={logOutUser} />
+      <EditUserForm onSubmit={editUserData} logOutUser={logOutUser} />
     </Content>
   )
 }
