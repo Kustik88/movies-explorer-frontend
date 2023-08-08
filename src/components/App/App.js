@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
@@ -13,20 +12,15 @@ import Register from '../Register/Register'
 import Profile from '../Profile/Profile'
 import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
-import Preloader from '../Preloader/Preloader'
 import InfoToolTips from '../IngoToolTips/InfoToolTips'
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute'
 import * as AuthApi from '../../utils/AuthApi'
 import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
-import { moviesList } from '../../constants/moviesList'
 import { moviesSavingList } from '../../constants/moviesSavingList'
-import {
-  SEARCH_MOVIES,
-  SEARCH_TEXT,
-  FILTER_CHECKBOX_STATE
-} from '../../constants/localStorage'
+import { getDataFromLocalStorage } from '../../helpers/getDataFromLocalStorage'
+import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE } from '../../constants/localStorage'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -36,10 +30,15 @@ function App() {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
-  const [numberOfCards, setNumberOfCards] = useState(0)
-  const [movies, setMovies] = useState([])
+  const [maxRenderingCards, setMaxRenderingCards] = useState(0)
+  const [moviesSearched, setMoviesSearched] = useState([])
+  const [textSearch, setTextSearch] = useState('')
+  const [isShortFilterActive, setIsShortFilterActive] = useState(false)
+  const [isDisabledFilter, SetIsDisabledFilter] = useState(true)
   const [token, setToken] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isServerError, setIsServerError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -69,6 +68,16 @@ function App() {
   }, [token])
 
   useEffect(() => {
+    const textSearched = localStorage.getItem(TEXT_SEARCH)
+    const moviesListSearched = getDataFromLocalStorage(MOVIES_SEARCH)
+    const filterCheckboxState = getDataFromLocalStorage(FILTER_CHECKBOX_STATE)
+    if (textSearched && moviesListSearched) {
+      SetIsDisabledFilter(false)
+      renderSearchMovies(textSearched, moviesListSearched, filterCheckboxState)
+    }
+  }, [isShortFilterActive])
+
+  useEffect(() => {
     function handleResize() {
       setIsSmallScreen(window.innerWidth <= 425);
       setIsMiddleScreen(window.innerWidth > 425 && window.innerWidth <= 820)
@@ -81,11 +90,11 @@ function App() {
 
   useEffect(() => {
     if (isSmallScreen) {
-      setNumberOfCards(5)
+      setMaxRenderingCards(5)
     } else if (isMiddleScreen) {
-      setNumberOfCards(8)
+      setMaxRenderingCards(8)
     } else {
-      setNumberOfCards(12)
+      setMaxRenderingCards(12)
     }
   }, [isSmallScreen, isMiddleScreen])
 
@@ -131,6 +140,7 @@ function App() {
   }
 
   function logOutUser() {
+    localStorage.clear()
     Cookies.remove('jwt')
     setToken('')
     setIsLoggedIn(false)
@@ -138,6 +148,8 @@ function App() {
       name: '',
       email: ''
     })
+    setMoviesSearched([])
+    setTextSearch('')
   }
 
   function handleEditUserData(name, email) {
@@ -158,31 +170,45 @@ function App() {
 
   function searchMovies(keyWord) {
     setIsLoading(true)
-    localStorage.setItem(SEARCH_TEXT, keyWord)
     MoviesApi.getMovies()
       .then(moviesList => {
+        setIsServerError(false)
         const keyWordToLowerCase = keyWord.toLowerCase()
-        const moviesListFilterKeyWord = moviesList.filter(movie => {
+        const moviesListSearch = moviesList.filter(movie => {
           return movie.nameRU.toLowerCase().includes(keyWordToLowerCase) || movie.nameEN.toLowerCase().includes(keyWordToLowerCase)
         })
-        setMovies(moviesListFilterKeyWord)
+        localStorage.setItem(TEXT_SEARCH, keyWord)
+        localStorage.setItem(MOVIES_SEARCH, JSON.stringify(moviesListSearch))
+        localStorage.setItem(FILTER_CHECKBOX_STATE, JSON.stringify(isShortFilterActive))
+        renderSearchMovies(keyWord, moviesListSearch, isShortFilterActive)
       })
-      .catch(err => showErrorToUser(err))
+      .catch(() => setIsServerError(true))
       .finally(() => setIsLoading(false))
   }
 
+  function renderSearchMovies(text, moviesList, filterCheckboxState) {
+    let moviesRendering
+    filterCheckboxState
+      ? moviesRendering = moviesList.filter(movie => movie.duration <= 40)
+      : moviesRendering = moviesList
+    setTextSearch(text)
+    setMoviesSearched(moviesRendering)
+  }
+
   function handleFilterShortMovies() {
-    const shortMovies = movies.filter(movie => movie.duration <= 40)
-    setMovies(shortMovies)
+    localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortFilterActive)
+    setIsShortFilterActive(!isShortFilterActive)
+
+
   }
 
   function handleAddCardsToPage() {
     if (isSmallScreen) {
-      setNumberOfCards(numberOfCards + 2)
+      setMaxRenderingCards(maxRenderingCards + 2)
     } else if (isMiddleScreen) {
-      setNumberOfCards(numberOfCards + 2)
+      setMaxRenderingCards(maxRenderingCards + 2)
     } else {
-      setNumberOfCards(numberOfCards + 3)
+      setMaxRenderingCards(maxRenderingCards + 3)
     }
   }
 
@@ -202,9 +228,9 @@ function App() {
   const isSavedMoviesPage = (path) => '/saved-movies'.includes(path)
   const returnPreviousPage = () => { navigate(-1) }
 
-  if (isLoading) {
-    return <Preloader />
-  }
+  // if (isLoading) {
+  //   return <Preloader />
+  // }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -216,7 +242,6 @@ function App() {
           pathName={pathName}
         />
         <InfoToolTips
-
           isSuccessSubmit={submitStatus.status}
           onClose={closeAllPopups}
           message={submitStatus.message}
@@ -235,14 +260,19 @@ function App() {
             <ProtectedRouteElement
               element={Movies}
               isLoggedIn={isLoggedIn}
-              moviesList={movies}
+              moviesList={moviesSearched}
+              isShortFilterActive={isShortFilterActive}
+              isDisabledFilter={isDisabledFilter}
+              textSearch={textSearch}
               moviesSavingList={moviesSavingList}
-              numberOfCards={numberOfCards}
+              numberOfRenderingCards={maxRenderingCards}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
               onSearch={searchMovies}
               onAdderMoviesClick={handleAddCardsToPage}
               onShortMoviesFilterClick={handleFilterShortMovies}
+              isServerError={isServerError}
+              isLoading={isLoading}
             />} />
           <Route path='/saved-movies' element={
             <ProtectedRouteElement

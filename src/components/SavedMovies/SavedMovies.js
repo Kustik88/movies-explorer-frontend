@@ -2,7 +2,7 @@ import Content from '../Content/Content'
 import SearchForm from '../SearchForm/SearchForm'
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import SavedDevider from '../SavedDevider/SavedDevider'
-import NotFoundMovies from '../NotFoundMovies/NotFoundMovies'
+import NotFoundMovies from '../BadSearchMoviesResult/BadSearchMoviesResult'
 
 function SavedMovies({ moviesList, isSavedMoviesPage, isSmallScreen, pathName }) {
   return (

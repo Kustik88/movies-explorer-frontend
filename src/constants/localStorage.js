@@ -1,5 +1,5 @@
-export const SEARCH_TEXT = 'seachText'
+export const TEXT_SEARCH = 'seachText'
 
-export const SEARCH_MOVIES = 'seachMovies'
+export const MOVIES_SEARCH = 'seachMovies'
 
 export const FILTER_CHECKBOX_STATE = 'filterCheckboxState'

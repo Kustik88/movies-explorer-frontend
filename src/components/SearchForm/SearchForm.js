@@ -3,9 +3,9 @@ import '../App/App.css'
 import { useState } from "react"
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
-function SearchForm({ isSmallScreen, onSubmit }) {
+function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, onShortMoviesFilterClick, isDisabledFilter }) {
   const [formValues, setFormValues] = useState({
-    movie: '',
+    movie: textSearch
   })
 
   function handleChange(e) {
@@ -27,7 +27,7 @@ function SearchForm({ isSmallScreen, onSubmit }) {
         {!isSmallScreen && <div className='search-form__search-icon' />}
         <input
           type="text"
-          value={formValues.name}
+          value={formValues.movie}
           className="search-form__input"
           name='movie'
           id='movie-input'
@@ -39,7 +39,7 @@ function SearchForm({ isSmallScreen, onSubmit }) {
         {/* <span className="form__input-error" id={'email-input-' + formName + '-error'} /> */}
         <button type="submit" aria-label='искать фильм' className="btn search-form__submit-btn" />
       </form>
-      <FilterCheckbox />
+      <FilterCheckbox onShortMoviesFilterClick={onShortMoviesFilterClick} isShortFilterActive={isShortFilterActive} isDisabledFilter={isDisabledFilter} />
     </section>
   )
 }
