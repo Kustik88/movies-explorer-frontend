@@ -14,9 +14,11 @@ function Movies({
   onAdderMoviesClick,
   onShortMoviesFilterClick,
   onSearch,
+  onMovieLike,
   textSearch,
   isShortFilterActive,
   isDisabledFilter,
+  isSavedMoviesPage,
   isServerError,
   isLoading
 }) {
@@ -36,6 +38,7 @@ function Movies({
             moviesSavingList={moviesSavingList}
             numberOfRenderingCards={numberOfRenderingCards}
             pathName={pathName}
+            onMovieLike={onMovieLike}
             isLoading={isLoading} />
           {(moviesList.length > numberOfRenderingCards && !isLoading)
             ? <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />

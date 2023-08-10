@@ -4,7 +4,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import SavedDevider from '../SavedDevider/SavedDevider'
 import NotFoundMovies from '../BadSearchMoviesResult/BadSearchMoviesResult'
 
-function SavedMovies({ moviesList, isSavedMoviesPage, isSmallScreen, pathName }) {
+function SavedMovies({ moviesList, isSmallScreen, pathName, onMovieLike }) {
   return (
     <Content>
       <SearchForm isSmallScreen={isSmallScreen} />
@@ -12,8 +12,8 @@ function SavedMovies({ moviesList, isSavedMoviesPage, isSmallScreen, pathName })
         ? <>
           <MoviesCardList
             moviesList={moviesList}
-            isSavedMoviesPage={isSavedMoviesPage}
-            pathName={pathName} />
+            pathName={pathName}
+            onMovieLike={onMovieLike} />
           <SavedDevider />
         </>
         : <NotFoundMovies />}

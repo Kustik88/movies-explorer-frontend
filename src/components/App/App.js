@@ -27,6 +27,7 @@ function App() {
   const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(false)
   const [submitStatus, setSubmitStatus] = useState({ status: false, message: '' })
   const [currentUser, setCurrentUser] = useState({})
+  const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
@@ -54,12 +55,14 @@ function App() {
       setIsLoading(false)
       return
     }
-    AuthApi.getCurrentUserData(token)
-      .then(res => {
+    Promise.all([AuthApi.getCurrentUserData(token), MainApi.getCurrentsUserMovies(token)])
+      .then(([currentUserData, currentUserMovies]) => {
         setCurrentUser({
-          name: res.name,
-          email: res.email,
+          name: currentUserData.name,
+          email: currentUserData.email,
+          _id: currentUserData._id,
         })
+        setCurrentUserMoviesList(currentUserMovies)
         setIsLoggedIn(true)
         navigate('/movies')
       })
@@ -75,7 +78,7 @@ function App() {
       SetIsDisabledFilter(false)
       renderSearchMovies(textSearched, moviesListSearched, filterCheckboxState)
     }
-  }, [isShortFilterActive])
+  }, [isShortFilterActive, currentUserMoviesList])
 
   useEffect(() => {
     function handleResize() {
@@ -146,7 +149,8 @@ function App() {
     setIsLoggedIn(false)
     setCurrentUser({
       name: '',
-      email: ''
+      email: '',
+      _id: '',
     })
     setMoviesSearched([])
     setTextSearch('')
@@ -198,8 +202,6 @@ function App() {
   function handleFilterShortMovies() {
     localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortFilterActive)
     setIsShortFilterActive(!isShortFilterActive)
-
-
   }
 
   function handleAddCardsToPage() {
@@ -216,6 +218,34 @@ function App() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
   }
 
+  function handleMovieLike(movie) {
+    let movieObjectId
+    let isLiked = false
+
+    const movieObject = currentUserMoviesList.find(movieSaved => movieSaved.movieId === movie.movieId);
+
+    if (movieObject) {
+      movieObjectId = movieObject._id;
+      isLiked = true;
+    }
+
+    if (isLiked) {
+      MainApi.dislikeMovie(movieObjectId, token)
+        .then((deletingMovie) => {
+          setCurrentUserMoviesList(movies =>
+            movies.filter(movie => movie.movieId !== deletingMovie.movieId)
+          )
+        })
+        .catch(err => displayError(err))
+    } else {
+      MainApi.likeMovie(movie, token)
+        .then(newMovie => {
+          setCurrentUserMoviesList(movies => [...movies, newMovie])
+        })
+        .catch(err => displayError(err))
+    }
+  }
+
   function closeAllPopups() {
     setIsdropDownMenuOpen(false)
     setisInfoToolTipPopupOpen(false)
@@ -225,7 +255,6 @@ function App() {
   const showFooter = (path) => ['/', '/movies', '/saved-movies'].includes(path)
   const isRegisterPathName = (path) => '/sign-up'.includes(path)
   const isProfilePathName = (path) => '/profile'.includes(path)
-  const isSavedMoviesPage = (path) => '/saved-movies'.includes(path)
   const returnPreviousPage = () => { navigate(-1) }
 
   // if (isLoading) {
@@ -264,13 +293,14 @@ function App() {
               isShortFilterActive={isShortFilterActive}
               isDisabledFilter={isDisabledFilter}
               textSearch={textSearch}
-              moviesSavingList={moviesSavingList}
+              moviesSavingList={currentUserMoviesList}
               numberOfRenderingCards={maxRenderingCards}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
               onSearch={searchMovies}
               onAdderMoviesClick={handleAddCardsToPage}
               onShortMoviesFilterClick={handleFilterShortMovies}
+              onMovieLike={handleMovieLike}
               isServerError={isServerError}
               isLoading={isLoading}
             />} />
@@ -278,12 +308,12 @@ function App() {
             <ProtectedRouteElement
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
-              moviesList={moviesSavingList}
-              isSavedMoviesPage={isSavedMoviesPage}
+              moviesList={currentUserMoviesList}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
               onSearch={searchMovies}
               onShortMoviesFilterClick={handleFilterShortMovies}
+              onMovieLike={handleMovieLike}
             />} />
           <Route path='/profile' element={
             <ProtectedRouteElement

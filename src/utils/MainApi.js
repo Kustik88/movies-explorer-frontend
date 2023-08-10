@@ -33,10 +33,10 @@ export function likeMovie(body, token) {
   )
 }
 
-export function dislikeMovie(moviesId, token) {
+export function dislikeMovie(movieId, token) {
   return makeRequest(
     BASE_URL_USER_API,
-    `/movies/${moviesId}`,
+    `/movies/${movieId}`,
     'DELETE',
     null,
     token,
