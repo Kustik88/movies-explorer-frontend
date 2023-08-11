@@ -18,9 +18,8 @@ import * as AuthApi from '../../utils/AuthApi'
 import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
-import { moviesSavingList } from '../../constants/moviesSavingList'
-import { getDataFromLocalStorage } from '../../helpers/getDataFromLocalStorage'
-import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE } from '../../constants/localStorage'
+import { getDataFromLocalStorage, setDataToLocalStorage } from '../../helpers/localStorageRequest'
+import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE, SAVED_MOVIES } from '../../constants/localStorage'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -34,8 +33,9 @@ function App() {
   const [maxRenderingCards, setMaxRenderingCards] = useState(0)
   const [moviesSearched, setMoviesSearched] = useState([])
   const [textSearch, setTextSearch] = useState('')
-  const [isShortFilterActive, setIsShortFilterActive] = useState(false)
-  const [isDisabledFilter, SetIsDisabledFilter] = useState(true)
+  const [isShortMoviesFilterActive, setIsShortMoviesFilterActive] = useState(false)
+  const [isShortSavedMoviesFilterActive, setIsSavedShortMoviesFilterActive] = useState(false)
+  const [isDisabledFilter, setIsDisabledFilter] = useState(true)
   const [token, setToken] = useState('')
   const [isServerError, setIsServerError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -62,6 +62,7 @@ function App() {
           email: currentUserData.email,
           _id: currentUserData._id,
         })
+        setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
         setCurrentUserMoviesList(currentUserMovies)
         setIsLoggedIn(true)
         navigate('/movies')
@@ -75,10 +76,11 @@ function App() {
     const moviesListSearched = getDataFromLocalStorage(MOVIES_SEARCH)
     const filterCheckboxState = getDataFromLocalStorage(FILTER_CHECKBOX_STATE)
     if (textSearched && moviesListSearched) {
-      SetIsDisabledFilter(false)
-      renderSearchMovies(textSearched, moviesListSearched, filterCheckboxState)
+      setIsDisabledFilter(false)
+      setTextSearch(textSearched)
+      setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
     }
-  }, [isShortFilterActive, currentUserMoviesList])
+  }, [isShortMoviesFilterActive])
 
   useEffect(() => {
     function handleResize() {
@@ -172,37 +174,52 @@ function App() {
       .finally(() => setisInfoToolTipPopupOpen(true))
   }
 
-  function searchMovies(keyWord) {
+  function filterMoviesListKeyword(keyword, list) {
+    const keywordToLowerCase = keyword.toLowerCase()
+    return list.filter(movie => {
+      return movie.nameRU.toLowerCase().includes(keywordToLowerCase) || movie.nameEN.toLowerCase().includes(keywordToLowerCase)
+    })
+  }
+
+  function searchMovies(keyword) {
     setIsLoading(true)
     MoviesApi.getMovies()
       .then(moviesList => {
         setIsServerError(false)
-        const keyWordToLowerCase = keyWord.toLowerCase()
-        const moviesListSearch = moviesList.filter(movie => {
-          return movie.nameRU.toLowerCase().includes(keyWordToLowerCase) || movie.nameEN.toLowerCase().includes(keyWordToLowerCase)
-        })
-        localStorage.setItem(TEXT_SEARCH, keyWord)
-        localStorage.setItem(MOVIES_SEARCH, JSON.stringify(moviesListSearch))
-        localStorage.setItem(FILTER_CHECKBOX_STATE, JSON.stringify(isShortFilterActive))
-        renderSearchMovies(keyWord, moviesListSearch, isShortFilterActive)
+        const moviesListSearch = filterMoviesListDuration(filterMoviesListKeyword(keyword, moviesList), isShortMoviesFilterActive)
+        localStorage.setItem(TEXT_SEARCH, keyword)
+        setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
+        setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
+        setTextSearch(keyword)
+        setMoviesSearched(moviesListSearch)
       })
       .catch(() => setIsServerError(true))
       .finally(() => setIsLoading(false))
   }
 
-  function renderSearchMovies(text, moviesList, filterCheckboxState) {
+  function searchSavingMovies(keyword) {
+    const userSavedMovies = getDataFromLocalStorage(SAVED_MOVIES)
+    const moviesListSearch = filterMoviesListDuration(filterMoviesListKeyword(keyword, userSavedMovies), isShortSavedMoviesFilterActive)
+    setCurrentUserMoviesList(moviesListSearch)
+  }
+
+  function filterMoviesListDuration(moviesList, filterCheckboxState) {
     let moviesRendering
     filterCheckboxState
       ? moviesRendering = moviesList.filter(movie => movie.duration <= 40)
       : moviesRendering = moviesList
-    setTextSearch(text)
-    setMoviesSearched(moviesRendering)
+    return moviesRendering
   }
 
   function handleFilterShortMovies() {
-    localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortFilterActive)
-    setIsShortFilterActive(!isShortFilterActive)
+    localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortMoviesFilterActive)
+    setIsShortMoviesFilterActive(!isShortMoviesFilterActive)
   }
+
+  function handleFilterShortSavedMovies() {
+    setIsSavedShortMoviesFilterActive(!isShortSavedMoviesFilterActive)
+  }
+
 
   function handleAddCardsToPage() {
     if (isSmallScreen) {
@@ -219,28 +236,25 @@ function App() {
   }
 
   function handleMovieLike(movie) {
-    let movieObjectId
-    let isLiked = false
-
     const movieObject = currentUserMoviesList.find(movieSaved => movieSaved.movieId === movie.movieId);
-
-    if (movieObject) {
-      movieObjectId = movieObject._id;
-      isLiked = true;
-    }
+    const isLiked = !!movieObject;
+    const movieObjectId = isLiked ? movieObject._id : null;
 
     if (isLiked) {
       MainApi.dislikeMovie(movieObjectId, token)
         .then((deletingMovie) => {
-          setCurrentUserMoviesList(movies =>
-            movies.filter(movie => movie.movieId !== deletingMovie.movieId)
-          )
-        })
+          const newList = currentUserMoviesList.filter(movie => movie.movieId !== deletingMovie.movieId)
+          setDataToLocalStorage(SAVED_MOVIES, newList)
+          setCurrentUserMoviesList(newList)
+        }
+        )
         .catch(err => displayError(err))
     } else {
       MainApi.likeMovie(movie, token)
         .then(newMovie => {
-          setCurrentUserMoviesList(movies => [...movies, newMovie])
+          const newList = [...currentUserMoviesList, newMovie]
+          setDataToLocalStorage(SAVED_MOVIES, newList)
+          setCurrentUserMoviesList(newList)
         })
         .catch(err => displayError(err))
     }
@@ -290,7 +304,7 @@ function App() {
               element={Movies}
               isLoggedIn={isLoggedIn}
               moviesList={moviesSearched}
-              isShortFilterActive={isShortFilterActive}
+              isShortFilterActive={isShortMoviesFilterActive}
               isDisabledFilter={isDisabledFilter}
               textSearch={textSearch}
               moviesSavingList={currentUserMoviesList}
@@ -311,8 +325,9 @@ function App() {
               moviesList={currentUserMoviesList}
               isSmallScreen={isSmallScreen}
               pathName={pathName}
-              onSearch={searchMovies}
-              onShortMoviesFilterClick={handleFilterShortMovies}
+              onSearch={searchSavingMovies}
+              isShortFilterActive={isShortSavedMoviesFilterActive}
+              onShortMoviesFilterClick={handleFilterShortSavedMovies}
               onMovieLike={handleMovieLike}
             />} />
           <Route path='/profile' element={

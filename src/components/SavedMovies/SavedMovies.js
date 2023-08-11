@@ -4,10 +4,25 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import SavedDevider from '../SavedDevider/SavedDevider'
 import NotFoundMovies from '../BadSearchMoviesResult/BadSearchMoviesResult'
 
-function SavedMovies({ moviesList, isSmallScreen, pathName, onMovieLike }) {
+function SavedMovies({
+  moviesList,
+  isSmallScreen,
+  pathName,
+  onShortMoviesFilterClick,
+  onSearch,
+  onMovieLike,
+  textSearch,
+  isShortFilterActive,
+  isDisabledFilter,
+}) {
   return (
     <Content>
-      <SearchForm isSmallScreen={isSmallScreen} />
+      <SearchForm isSmallScreen={isSmallScreen}
+        onSubmit={onSearch}
+        textSearch={textSearch}
+        isShortFilterActive={isShortFilterActive}
+        onShortMoviesFilterClick={onShortMoviesFilterClick}
+        isDisabledFilter={isDisabledFilter} />
       {moviesList.length !== 0
         ? <>
           <MoviesCardList

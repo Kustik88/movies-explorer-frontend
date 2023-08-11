@@ -37,9 +37,12 @@ function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, 
           maxLength="40"
           required />
         {/* <span className="form__input-error" id={'email-input-' + formName + '-error'} /> */}
-        <button type="submit" aria-label='искать фильм' className="btn search-form__submit-btn" />
+        <button type="submit" aria-label='искать фильмы' className="btn search-form__submit-btn" />
       </form>
-      <FilterCheckbox onShortMoviesFilterClick={onShortMoviesFilterClick} isShortFilterActive={isShortFilterActive} isDisabledFilter={isDisabledFilter} />
+      <FilterCheckbox
+        onShortMoviesFilterClick={onShortMoviesFilterClick}
+        isShortFilterActive={isShortFilterActive}
+        isDisabledFilter={isDisabledFilter} />
     </section>
   )
 }
