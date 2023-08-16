@@ -3,7 +3,7 @@ import '../App/App.css'
 import { useState } from "react"
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
 
-function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, onShortMoviesFilterClick, isDisabledFilter }) {
+function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, onShortMoviesFilterClick }) {
   const [formValues, setFormValues] = useState({
     movie: textSearch
   })
@@ -41,8 +41,7 @@ function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, 
       </form>
       <FilterCheckbox
         onShortMoviesFilterClick={onShortMoviesFilterClick}
-        isShortFilterActive={isShortFilterActive}
-        isDisabledFilter={isDisabledFilter} />
+        isShortFilterActive={isShortFilterActive} />
     </section>
   )
 }

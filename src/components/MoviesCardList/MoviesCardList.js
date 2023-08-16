@@ -24,7 +24,7 @@ function MoviesCardList({
           {isSavedMoviesPage
             ? renderList.map(card =>
               <MoviesCard
-                key={card.id}
+                key={card._id}
                 card={card}
                 isSavedMoviesPage={isSavedMoviesPage}
                 onMovieLike={onMovieLike} />)

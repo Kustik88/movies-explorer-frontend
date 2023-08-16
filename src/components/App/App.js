@@ -33,9 +33,9 @@ function App() {
   const [maxRenderingCards, setMaxRenderingCards] = useState(0)
   const [moviesSearched, setMoviesSearched] = useState([])
   const [textSearch, setTextSearch] = useState('')
+  const [textSavedMoviesSearch, setTextSavedMoviesSearch] = useState('')
   const [isShortMoviesFilterActive, setIsShortMoviesFilterActive] = useState(false)
   const [isShortSavedMoviesFilterActive, setIsSavedShortMoviesFilterActive] = useState(false)
-  const [isDisabledFilter, setIsDisabledFilter] = useState(true)
   const [token, setToken] = useState('')
   const [isServerError, setIsServerError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -76,15 +76,24 @@ function App() {
     const moviesListSearched = getDataFromLocalStorage(MOVIES_SEARCH)
     const filterCheckboxState = getDataFromLocalStorage(FILTER_CHECKBOX_STATE)
     if (textSearched && moviesListSearched) {
-      setIsDisabledFilter(false)
       setTextSearch(textSearched)
       setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
     }
-  }, [isShortMoviesFilterActive])
+  }, [isShortMoviesFilterActive, textSearch])
+
+  useEffect(() => {
+    const list = getDataFromLocalStorage(SAVED_MOVIES)
+    updateMoviesList(textSavedMoviesSearch, list, isShortSavedMoviesFilterActive, setCurrentUserMoviesList)
+  }, [isShortSavedMoviesFilterActive, textSavedMoviesSearch])
+
+  useEffect(() => {
+    setTextSavedMoviesSearch('')
+    setIsSavedShortMoviesFilterActive(false)
+  }, [location.pathname])
 
   useEffect(() => {
     function handleResize() {
-      setIsSmallScreen(window.innerWidth <= 425);
+      setIsSmallScreen(window.innerWidth <= 425)
       setIsMiddleScreen(window.innerWidth > 425 && window.innerWidth <= 820)
     }
 
@@ -181,26 +190,31 @@ function App() {
     })
   }
 
+  function searchSavingMovies(keyword) {
+    setTextSavedMoviesSearch(keyword)
+  }
+
   function searchMovies(keyword) {
     setIsLoading(true)
     MoviesApi.getMovies()
       .then(moviesList => {
         setIsServerError(false)
-        const moviesListSearch = filterMoviesListDuration(filterMoviesListKeyword(keyword, moviesList), isShortMoviesFilterActive)
+        const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
         localStorage.setItem(TEXT_SEARCH, keyword)
         setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
         setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
         setTextSearch(keyword)
-        setMoviesSearched(moviesListSearch)
       })
       .catch(() => setIsServerError(true))
       .finally(() => setIsLoading(false))
   }
 
-  function searchSavingMovies(keyword) {
-    const userSavedMovies = getDataFromLocalStorage(SAVED_MOVIES)
-    const moviesListSearch = filterMoviesListDuration(filterMoviesListKeyword(keyword, userSavedMovies), isShortSavedMoviesFilterActive)
-    setCurrentUserMoviesList(moviesListSearch)
+  function updateMoviesList(textSearch, list, filterCheckboxState, functionChange) {
+    let moviesListSearched
+    textSearch
+      ? moviesListSearched = filterMoviesListKeyword(textSearch, list)
+      : moviesListSearched = list
+    functionChange(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
   }
 
   function filterMoviesListDuration(moviesList, filterCheckboxState) {
@@ -244,8 +258,7 @@ function App() {
       MainApi.dislikeMovie(movieObjectId, token)
         .then((deletingMovie) => {
           const newList = currentUserMoviesList.filter(movie => movie.movieId !== deletingMovie.movieId)
-          setDataToLocalStorage(SAVED_MOVIES, newList)
-          setCurrentUserMoviesList(newList)
+          updateCurrentUserList(newList)
         }
         )
         .catch(err => displayError(err))
@@ -253,11 +266,15 @@ function App() {
       MainApi.likeMovie(movie, token)
         .then(newMovie => {
           const newList = [...currentUserMoviesList, newMovie]
-          setDataToLocalStorage(SAVED_MOVIES, newList)
-          setCurrentUserMoviesList(newList)
+          updateCurrentUserList(newList)
         })
         .catch(err => displayError(err))
     }
+  }
+
+  function updateCurrentUserList(list) {
+    setDataToLocalStorage(SAVED_MOVIES, list)
+    setCurrentUserMoviesList(list)
   }
 
   function closeAllPopups() {
@@ -305,7 +322,6 @@ function App() {
               isLoggedIn={isLoggedIn}
               moviesList={moviesSearched}
               isShortFilterActive={isShortMoviesFilterActive}
-              isDisabledFilter={isDisabledFilter}
               textSearch={textSearch}
               moviesSavingList={currentUserMoviesList}
               numberOfRenderingCards={maxRenderingCards}

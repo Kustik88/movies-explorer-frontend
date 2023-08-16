@@ -1,6 +1,6 @@
 import './FilterCheckbox.css'
 
-function FilterCheckbox({ onShortMoviesFilterClick, isShortFilterActive, isDisabledFilter }) {
+function FilterCheckbox({ onShortMoviesFilterClick, isShortFilterActive }) {
 
   return (
     <form className='filter-checkbox'>
@@ -11,7 +11,6 @@ function FilterCheckbox({ onShortMoviesFilterClick, isShortFilterActive, isDisab
         className='filter-checkbox__checkbox'
         onChange={onShortMoviesFilterClick}
         defaultChecked={isShortFilterActive}
-        disabled={isDisabledFilter}
       />
       <label
         className='filter-checkbox__new-checkbox'

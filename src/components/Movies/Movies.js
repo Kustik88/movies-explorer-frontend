@@ -17,8 +17,6 @@ function Movies({
   onMovieLike,
   textSearch,
   isShortFilterActive,
-  isDisabledFilter,
-  isSavedMoviesPage,
   isServerError,
   isLoading
 }) {
@@ -29,8 +27,7 @@ function Movies({
         onSubmit={onSearch}
         textSearch={textSearch}
         isShortFilterActive={isShortFilterActive}
-        onShortMoviesFilterClick={onShortMoviesFilterClick}
-        isDisabledFilter={isDisabledFilter} />
+        onShortMoviesFilterClick={onShortMoviesFilterClick} />
       {moviesList.length !== 0
         ? <>
           <MoviesCardList
