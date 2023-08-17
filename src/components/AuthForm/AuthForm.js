@@ -1,28 +1,24 @@
 import { Link } from 'react-router-dom'
-import { useState } from "react"
+import { useForm } from 'react-hook-form'
+import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAIL_REQUIRED } from '../../constants/errorInput'
 import './AuthForm.css'
 import '../App/App.css'
 
 function AuthForm({ formName, isRegisterPathName, onSubmit }) {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
-    password: '',
-  })
+  const { register,
+    handleSubmit,
+    formState: {
+      errors,
+      isValid
+    },
+    reset,
+  } = useForm({ mode: 'onChange' })
 
-  function handleSubmit(evt) {
-    evt.preventDefault()
+  function handleSubmitData(data) {
     isRegisterPathName
-      ? onSubmit(formValues.name, formValues.email, formValues.password)
-      : onSubmit(formValues.email, formValues.password)
-  }
-
-  function handleChange(evt) {
-    const input = evt.target
-    setFormValues({
-      ...formValues,
-      [input.name]: input.value
-    })
+      ? onSubmit(data.name, data.email, data.password)
+      : onSubmit(data.email, data.password)
+    reset()
   }
 
   const userNameFormId = `user-name-${formName}`
@@ -43,75 +39,90 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
     }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} >
+    <form className="auth-form" onSubmit={handleSubmit(handleSubmitData)} >
       <div className='auth-form__input-container'>
         {isRegisterPathName &&
           <>
             <label htmlFor={`user-name-${formName}`} className="auth-form__label">Имя</label>
             <input
-              type="text"
-              value={formValues.name}
-              id={userNameFormId}
-              name="name"
-              onChange={handleChange}
+              type='text'
               className="auth-form__input"
               placeholder="Введите имя"
-              minLength="2"
-              maxLength="40"
-              required
+              id={userNameFormId}
+              {...register('name', {
+                required: FIELD_REQURED,
+                minLength: {
+                  value: 2,
+                  message: MIN_LENGTH_TWO
+                },
+                maxLength: {
+                  value: 40,
+                  message: MAX_LENGTH_FORTY
+                },
+              })}
             />
             <span
-              className="auth-form__input-error"
-              id={`${userNameFormId}-input-error`}
-            >
-              Что-то пошло не так...
+              className={`auth-form__input-error${errors.name
+                ? ' auth-form__input-error_visible'
+                : ''}`}
+              id={`${userNameFormId}-input-error`}>
+              {errors.name && errors.name.message}
             </span>
           </>}
         <label htmlFor={`email-${formName}`} className="auth-form__label">E-mail</label>
         <input
           type="email"
-          value={formValues.email}
-          id={emailFormId}
-          onChange={handleChange}
-          name="email"
           className="auth-form__input"
           placeholder="Введите почту"
-          required
+          id={emailFormId}
+          {...register('email', {
+            required: FIELD_REQURED,
+            pattern: {
+              value: /.+@.+\..+/i,
+              message: EMAIL_REQUIRED
+            }
+
+          })}
         />
         <span
-          className="auth-form__input-error"
-          id={`${emailFormId}-input-error`}
-        >
-          Что-то пошло не так...
+          className={`auth-form__input-error${errors.email
+            ? ' auth-form__input-error_visible'
+            : ''}`}>
+          {errors.email && errors.email.message}
         </span>
         <label htmlFor={`password-${formName}`} className="auth-form__label">Пароль</label>
         <input
           type="password"
-          value={formValues.password}
-          id={passwordFormId}
-          name="password"
-          onChange={handleChange}
           className="auth-form__input"
-          placeholder="Введите пароль"
-          minLength="7"
-          maxLength="40"
-          required
+          id={passwordFormId}
+          {...register('password', {
+            required: FIELD_REQURED,
+            minLength: {
+              value: 7,
+              message: MIN_LENGTH_SEVEN
+            },
+            maxLength: {
+              value: 40,
+              message: MAX_LENGTH_FORTY
+            },
+          })}
         />
         <span
-          className="auth-form__input-error auth-form__input-error_visible"
-          id={`${passwordFormId}-input-error`}
-        >
-          Что-то пошло не так...
+          className={`auth-form__input-error${errors.password
+            ? ' auth-form__input-error_visible'
+            : ''}`}>
+          {errors.password && errors.password.message}
         </span>
       </div>
-      <button className="btn auth-form__sbt-button"
+      <button
+        className="btn auth-form__sbt-button"
         type="submit"
-        aria-label="Отправить данные">
+        aria-label="Отправить данные"
+        disabled={!isValid}>
         {form.buttonText}
       </button>
       <div className="auth-form__text">
-        <p
-          className="auth-form__question">
+        <p className="auth-form__question">
           {form.questionText}?
         </p>
         <Link

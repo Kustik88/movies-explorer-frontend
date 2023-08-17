@@ -41,7 +41,9 @@
 }
 
 .auth-form__input-error {
-  width: 100%;
+  display: block;
+  max-width: 100%;
+  min-height: 12px;
   font-size: 10px;
   font-weight: 400;
   line-height: 120%;
@@ -65,6 +67,12 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 121%;
+}
+
+.auth-form__sbt-button:disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  cursor: default;
 }
 
 .auth-form__text {
