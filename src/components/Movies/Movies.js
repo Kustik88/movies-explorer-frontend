@@ -2,7 +2,7 @@ import Content from '../Content/Content'
 import SearchForm from '../SearchForm/SearchForm'
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import AdderMovies from '../AdderMovies/AdderMovies'
-import BadResultFoundMovies from '../BadSearchMoviesResult/BadSearchMoviesResult'
+import BadSearchMoviesResult from '../BadSearchMoviesResult/BadSearchMoviesResult'
 import SavedDevider from '../SavedDevider/SavedDevider'
 
 function Movies({
@@ -41,7 +41,7 @@ function Movies({
             ? <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
             : <SavedDevider />}
         </>
-        : textSearch ? <BadResultFoundMovies isServerError={isServerError} /> : <SavedDevider />
+        : textSearch ? <BadSearchMoviesResult isServerError={isServerError} /> : <SavedDevider />
       }
     </Content>
   )

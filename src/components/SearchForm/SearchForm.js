@@ -23,7 +23,7 @@ function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, 
 
   return (
     <section className='search-form' >
-      <form className='search-form__form' onSubmit={handleSubmit}>
+      <form className='search-form__form' onSubmit={handleSubmit} noValidate>
         {!isSmallScreen && <div className='search-form__search-icon' />}
         <input
           type="text"

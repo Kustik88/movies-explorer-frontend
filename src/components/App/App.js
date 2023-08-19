@@ -79,7 +79,7 @@ function App() {
       setTextSearch(textSearched)
       setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
     }
-  }, [isShortMoviesFilterActive, textSearch])
+  }, [isShortMoviesFilterActive])
 
   useEffect(() => {
     const list = getDataFromLocalStorage(SAVED_MOVIES)
@@ -190,12 +190,19 @@ function App() {
     })
   }
 
+  function checkKeyword(keyword) {
+    if (!keyword) {
+      throw new Error('Нужно ввести ключевое слово')
+    }
+  }
+
   function searchSavingMovies(keyword) {
     setTextSavedMoviesSearch(keyword)
   }
 
   function searchMovies(keyword) {
     setIsLoading(true)
+    setTextSearch(keyword)
     MoviesApi.getMovies()
       .then(moviesList => {
         setIsServerError(false)
@@ -203,9 +210,13 @@ function App() {
         localStorage.setItem(TEXT_SEARCH, keyword)
         setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
         setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
-        setTextSearch(keyword)
+        setMoviesSearched(moviesListSearch)
       })
-      .catch(() => setIsServerError(true))
+      .catch(() => {
+        setIsServerError(true)
+        setMoviesSearched([])
+
+      })
       .finally(() => setIsLoading(false))
   }
 

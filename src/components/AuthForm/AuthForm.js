@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAIL_REQUIRED } from '../../constants/errorInput'
+import { REGEX_EMAIL } from '../../constants/regex'
 import './AuthForm.css'
 import '../App/App.css'
 
@@ -39,7 +40,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
     }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit(handleSubmitData)} >
+    <form className="auth-form" onSubmit={handleSubmit(handleSubmitData)} noValidate>
       <div className='auth-form__input-container'>
         {isRegisterPathName &&
           <>
@@ -64,8 +65,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
             <span
               className={`auth-form__input-error${errors.name
                 ? ' auth-form__input-error_visible'
-                : ''}`}
-              id={`${userNameFormId}-input-error`}>
+                : ''}`}>
               {errors.name && errors.name.message}
             </span>
           </>}
@@ -78,10 +78,9 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
           {...register('email', {
             required: FIELD_REQURED,
             pattern: {
-              value: /.+@.+\..+/i,
+              value: REGEX_EMAIL,
               message: EMAIL_REQUIRED
             }
-
           })}
         />
         <span

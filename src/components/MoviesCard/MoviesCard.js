@@ -1,5 +1,6 @@
 import '../App/App.css'
 import './MoviesCard.css'
+import { Link } from 'react-router-dom'
 import { BASE_URL_MOVIES_API } from '../../constants/baseUrl'
 
 function MoviesCard({ card, isSaved, isSavedMoviesPage, onMovieLike }) {
@@ -41,7 +42,13 @@ function MoviesCard({ card, isSaved, isSavedMoviesPage, onMovieLike }) {
             Сохранить
           </button>
       }
-      <img className='card__image' src={movie.image} alt={card.nameRU} />
+      <Link
+        className='card__trailer-link'
+        to={movie.trailerLink}
+        target='_blank'
+      >
+        <img className='card__image' src={movie.image} alt={card.nameRU} />
+      </Link>
       <div className='card__descriprion'>
         <h3
           className='card__name'>

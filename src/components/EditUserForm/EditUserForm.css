@@ -1,7 +1,7 @@
 .edit-user-form {
   width: 410px;
   padding: 0;
-  margin: 125px auto 0;
+  margin: 127px auto 0;
   display: flex;
   flex-direction: column;
 }
@@ -10,7 +10,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 141px 1fr;
-  row-gap: 19px;
+  grid-template-rows: auto auto;
   position: relative;
 }
 
@@ -33,13 +33,30 @@
   line-height: 118%;
   background-color: inherit;
   border: 0;
-  padding: 0 0 17px 0;
+  padding: 0;
   color: #FFF;
   text-align: right;
 }
 
 .edit-user-form__input:focus {
   outline: none;
+}
+
+.edit-user-form__input-error {
+  grid-column: 1 / 3;
+  display: block;
+  max-width: 100%;
+  min-height: 12px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 120%;
+  padding-bottom: 23px;
+  color: #EE3465;
+  visibility: hidden;
+}
+
+.edit-user-form__input-error_visible {
+  visibility: visible;
 }
 
 .edit-user-form__label {
@@ -58,7 +75,12 @@
   border: 0;
   width: fit-content;
   padding: 0;
-  margin: 204px auto 0;
+  margin: 186px auto 0;
+}
+
+.edit-user-form__sbt-button:disabled {
+  color: #c2c2c2;
+  cursor: default;
 }
 
 .edit-user-form__logout-link {
@@ -76,7 +98,7 @@
   }
 
   .edit-user-form__sbt-button {
-    margin-top: 195px;
+    margin-top: 176px;
   }
 }
 
@@ -87,7 +109,7 @@
   }
 
   .edit-user-form__sbt-button {
-    margin-top: 363px;
+    margin-top: 346px;
     font-size: 12px;
     line-height: 125%;
   }
