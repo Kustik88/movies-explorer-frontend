@@ -52,6 +52,10 @@
   z-index: 10;
 }
 
+.preloader_size_large {
+  height: 100vh;
+}
+
 .preloader__container {
   width: 100px;
   position: relative;

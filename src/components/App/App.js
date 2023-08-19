@@ -14,12 +14,14 @@ import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
 import InfoToolTips from '../IngoToolTips/InfoToolTips'
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute'
+import Preloader from '../Preloader/Preloader'
 import * as AuthApi from '../../utils/AuthApi'
 import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import { getDataFromLocalStorage, setDataToLocalStorage } from '../../helpers/localStorageRequest'
 import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE, SAVED_MOVIES } from '../../constants/localStorage'
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -38,7 +40,8 @@ function App() {
   const [isShortSavedMoviesFilterActive, setIsSavedShortMoviesFilterActive] = useState(false)
   const [token, setToken] = useState('')
   const [isServerError, setIsServerError] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingApp, setIsLoadingApp] = useState(true)
+  const [isLoadingResultRequest, setIsLoadingResultRequest] = useState(false)
 
 
   const navigate = useNavigate()
@@ -51,8 +54,9 @@ function App() {
   }, [])
 
   useEffect(() => {
+    setIsLoadingApp(true)
     if (!token) {
-      setIsLoading(false)
+      setIsLoadingApp(false)
       return
     }
     Promise.all([AuthApi.getCurrentUserData(token), MainApi.getCurrentsUserMovies(token)])
@@ -68,7 +72,7 @@ function App() {
         navigate('/movies')
       })
       .catch(err => displayError(err))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoadingApp(false))
   }, [token])
 
   useEffect(() => {
@@ -79,6 +83,7 @@ function App() {
       setTextSearch(textSearched)
       setIsShortMoviesFilterActive(filterCheckboxState)
       setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
+
     }
   }, [isShortMoviesFilterActive])
 
@@ -191,18 +196,12 @@ function App() {
     })
   }
 
-  function checkKeyword(keyword) {
-    if (!keyword) {
-      throw new Error('Нужно ввести ключевое слово')
-    }
-  }
-
   function searchSavingMovies(keyword) {
     setTextSavedMoviesSearch(keyword)
   }
 
   function searchMovies(keyword) {
-    setIsLoading(true)
+    setIsLoadingResultRequest(true)
     setTextSearch(keyword)
     MoviesApi.getMovies()
       .then(moviesList => {
@@ -218,7 +217,7 @@ function App() {
         setMoviesSearched([])
 
       })
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoadingResultRequest(false))
   }
 
   function updateMoviesList(textSearch, list, filterCheckboxState, functionChange) {
@@ -300,9 +299,9 @@ function App() {
   const isProfilePathName = (path) => '/profile'.includes(path)
   const returnPreviousPage = () => { navigate(-1) }
 
-  // if (isLoading) {
-  //   return <Preloader />
-  // }
+  if (isLoadingApp) {
+    return <Preloader isAppLoading={isLoadingApp} />
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -344,7 +343,7 @@ function App() {
               onShortMoviesFilterClick={handleFilterShortMovies}
               onMovieLike={handleMovieLike}
               isServerError={isServerError}
-              isLoading={isLoading}
+              isLoading={isLoadingResultRequest}
             />} />
           <Route path='/saved-movies' element={
             <ProtectedRouteElement
