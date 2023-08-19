@@ -1,43 +1,45 @@
 import './SearchForm.css'
 import '../App/App.css'
-import { useState } from "react"
+import { useForm } from 'react-hook-form'
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox'
+import { MAX_LENGTH_FORTY, KEYWORD_REQUIRED } from '../../constants/errorInput'
 
 function SearchForm({ isSmallScreen, textSearch, isShortFilterActive, onSubmit, onShortMoviesFilterClick }) {
-  const [formValues, setFormValues] = useState({
-    movie: textSearch
-  })
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({ mode: 'onSubmit' });
 
-  function handleChange(e) {
-    const input = e.target
-    setFormValues({
-      ...formValues,
-      [input.name]: input.value
-    })
-  }
-
-  function handleSubmit(evt) {
-    evt.preventDefault()
-    onSubmit(formValues.movie)
+  function handleSubmitData(data) {
+    onSubmit(data.movie)
   }
 
   return (
     <section className='search-form' >
-      <form className='search-form__form' onSubmit={handleSubmit} noValidate>
+      <form className='search-form__form' onSubmit={handleSubmit(handleSubmitData)}>
         {!isSmallScreen && <div className='search-form__search-icon' />}
         <input
           type="text"
-          value={formValues.movie}
           className="search-form__input"
-          name='movie'
+          defaultValue={textSearch || ''}
           id='movie-input'
           placeholder="Фильм"
-          onChange={handleChange}
-          minLength="1"
-          maxLength="40"
-          required />
-        {/* <span className="form__input-error" id={'email-input-' + formName + '-error'} /> */}
+          {...register("movie", {
+            required: KEYWORD_REQUIRED,
+            maxLength: {
+              value: 40,
+              message: MAX_LENGTH_FORTY
+            },
+
+          })} />
         <button type="submit" aria-label='искать фильмы' className="btn search-form__submit-btn" />
+        <span
+          className={`search-form__input-error${errors.movie
+            ? ' search-form__input-error_visible'
+            : ''}`}>
+          {errors.movie && errors.movie.message}
+        </span>
       </form>
       <FilterCheckbox
         onShortMoviesFilterClick={onShortMoviesFilterClick}

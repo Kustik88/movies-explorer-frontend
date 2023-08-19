@@ -77,6 +77,7 @@ function App() {
     const filterCheckboxState = getDataFromLocalStorage(FILTER_CHECKBOX_STATE)
     if (textSearched && moviesListSearched) {
       setTextSearch(textSearched)
+      setIsShortMoviesFilterActive(filterCheckboxState)
       setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
     }
   }, [isShortMoviesFilterActive])
