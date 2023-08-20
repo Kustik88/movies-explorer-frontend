@@ -40,6 +40,7 @@ function App() {
   const [isServerError, setIsServerError] = useState(false)
   const [isLoadingApp, setIsLoadingApp] = useState(true)
   const [isLoadingResultRequest, setIsLoadingResultRequest] = useState(false)
+  const [isInternetTrobles, setIsInternetTrobles] = useState(false)
 
 
   const navigate = useNavigate()
@@ -125,8 +126,13 @@ function App() {
   }
 
   function showErrorToUser(err) {
-    const error = JSON.parse(err.message)
-    setErorrSubmit(error.message)
+    try {
+      const error = JSON.parse(err.message);
+      const message = error.message;
+      setErorrSubmit(message);
+    } catch (err) {
+      setErorrSubmit('Произошла ошибка. Попробуйте снова')
+    }
   }
 
   function registerUser(name, email, password) {
@@ -345,6 +351,7 @@ function App() {
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
               errorText={erorrSubmit}
+
             />}
           />
           <Route

@@ -31,7 +31,9 @@ function SavedMovies({
             onMovieLike={onMovieLike} />
           <SavedDevider />
         </>
-        : <NotFoundMovies />}
+        : textSearch
+          ? <NotFoundMovies />
+          : <SavedDevider />}
     </Content>
   )
 }
