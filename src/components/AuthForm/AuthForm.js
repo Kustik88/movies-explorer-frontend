@@ -4,8 +4,9 @@ import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAI
 import { REGEX_EMAIL } from '../../constants/regex'
 import './AuthForm.css'
 import '../App/App.css'
+import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
 
-function AuthForm({ formName, isRegisterPathName, onSubmit }) {
+function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
   const { register,
     handleSubmit,
     formState: {
@@ -30,13 +31,31 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
       buttonText: 'Зарегистрироваться',
       pathName: '/sign-in',
       questionText: 'Уже зарегистрированы',
-      linkText: 'Войти'
+      linkText: 'Войти',
+      registerFunctionUseForm: {
+        ...register('password', {
+          required: FIELD_REQURED,
+          minLength: {
+            value: 7,
+            message: MIN_LENGTH_SEVEN
+          },
+          maxLength: {
+            value: 40,
+            message: MAX_LENGTH_FORTY
+          },
+        })
+      }
     }
     : {
       buttonText: 'Войти',
       pathName: '/sign-up',
       questionText: 'Еще не зарегистрированы',
-      linkText: 'Регистрация'
+      linkText: 'Регистрация',
+      registerFunctionUseForm: {
+        ...register('password', {
+          required: FIELD_REQURED,
+        })
+      }
     }
 
   return (
@@ -94,17 +113,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
           type="password"
           className="auth-form__input"
           id={passwordFormId}
-          {...register('password', {
-            required: FIELD_REQURED,
-            minLength: {
-              value: 7,
-              message: MIN_LENGTH_SEVEN
-            },
-            maxLength: {
-              value: 40,
-              message: MAX_LENGTH_FORTY
-            },
-          })}
+          {...form.registerFunctionUseForm}
         />
         <span
           className={`auth-form__input-error${errors.password
@@ -113,6 +122,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit }) {
           {errors.password && errors.password.message}
         </span>
       </div>
+      <ErrorRequestForForm text={errorText} />
       <button
         className="btn auth-form__sbt-button"
         type="submit"

@@ -12,6 +12,7 @@
   grid-template-columns: 141px 1fr;
   grid-template-rows: auto auto;
   position: relative;
+  padding-bottom: 113px;
 }
 
 
@@ -75,7 +76,7 @@
   border: 0;
   width: fit-content;
   padding: 0;
-  margin: 186px auto 0;
+  margin: 20px auto 0;
 }
 
 .edit-user-form__sbt-button:disabled {
@@ -97,19 +98,22 @@
     margin-top: 100px;
   }
 
-  .edit-user-form__sbt-button {
-    margin-top: 176px;
+  .edit-user-form__input-container {
+    padding-bottom: 102px;
   }
 }
 
 @media screen and (max-width: 425px) {
   .edit-user-form {
     width: calc(100% - 60px);
-    margin-top: 84px;
+    margin-top: 85px;
+  }
+
+  .edit-user-form__input-container {
+    padding-bottom: 183px;
   }
 
   .edit-user-form__sbt-button {
-    margin-top: 346px;
     font-size: 12px;
     line-height: 125%;
   }

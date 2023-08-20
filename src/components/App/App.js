@@ -12,7 +12,6 @@ import Register from '../Register/Register'
 import Profile from '../Profile/Profile'
 import PageNotFound from '../PageNotFound/PageNotFound'
 import Footer from '../Footer/Footer'
-import InfoToolTips from '../IngoToolTips/InfoToolTips'
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute'
 import Preloader from '../Preloader/Preloader'
 import * as AuthApi from '../../utils/AuthApi'
@@ -25,8 +24,7 @@ import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE, SAVED_MOVIES } from 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [isInfoToolTipPopupOpen, setisInfoToolTipPopupOpen] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState({ status: false, message: '' })
+  const [erorrSubmit, setErorrSubmit] = useState('')
   const [currentUser, setCurrentUser] = useState({})
   const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
@@ -74,6 +72,10 @@ function App() {
       .catch(err => displayError(err))
       .finally(() => setIsLoadingApp(false))
   }, [token])
+
+  useEffect(() => {
+    setErorrSubmit('')
+  }, [navigate])
 
   useEffect(() => {
     const textSearched = localStorage.getItem(TEXT_SEARCH)
@@ -124,26 +126,16 @@ function App() {
 
   function showErrorToUser(err) {
     const error = JSON.parse(err.message)
-    setSubmitStatus({
-      status: false,
-      message: error.message
-    })
+    setErorrSubmit(error.message)
   }
 
   function registerUser(name, email, password) {
     AuthApi.register(name, email, password)
       .then(() => {
-        setSubmitStatus({
-          status: true,
-          message: 'Вы успешно зарегестрировались!'
-        })
-        navigate('/sign-in')
+        loginUser(email, password)
       })
       .catch(err => {
         showErrorToUser(err)
-      })
-      .finally(() => {
-        setisInfoToolTipPopupOpen(true)
       })
   }
 
@@ -155,7 +147,6 @@ function App() {
       })
       .catch(err => {
         showErrorToUser(err)
-        setisInfoToolTipPopupOpen(true)
       })
   }
 
@@ -176,17 +167,12 @@ function App() {
   function handleEditUserData(name, email) {
     MainApi.editCurrentUserData(name, email, token)
       .then(res => {
-        setSubmitStatus({
-          status: true,
-          message: 'Данные успешно измененены'
-        })
         setCurrentUser({
           name: res.name,
           email: res.email,
         })
       })
       .catch(err => showErrorToUser(err))
-      .finally(() => setisInfoToolTipPopupOpen(true))
   }
 
   function filterMoviesListKeyword(keyword, list) {
@@ -290,7 +276,6 @@ function App() {
 
   function closeAllPopups() {
     setIsdropDownMenuOpen(false)
-    setisInfoToolTipPopupOpen(false)
   }
 
   const showHeader = (path) => ['/', '/movies', '/saved-movies', '/profile'].includes(path)
@@ -311,12 +296,6 @@ function App() {
           isMiddleScreen={isMiddleScreen || isSmallScreen}
           onClose={closeAllPopups}
           pathName={pathName}
-        />
-        <InfoToolTips
-          isSuccessSubmit={submitStatus.status}
-          onClose={closeAllPopups}
-          message={submitStatus.message}
-          isOpen={isInfoToolTipPopupOpen}
         />
         {showHeader(pathName)
           && <Header
@@ -365,6 +344,7 @@ function App() {
               editUserData={handleEditUserData}
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
+              errorText={erorrSubmit}
             />}
           />
           <Route
@@ -374,6 +354,7 @@ function App() {
                 formName='login'
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onLogin={loginUser}
+                errorText={erorrSubmit}
               />} />
           <Route
             path='/sign-up'
@@ -383,6 +364,7 @@ function App() {
                 formName='register'
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onSignUp={registerUser}
+                errorText={erorrSubmit}
               />} />
           <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
