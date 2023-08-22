@@ -1,0 +1,7 @@
+export const REGISTER_PATHNAME = '/sign-up'
+export const LOGIN_PATHNAME = '/sign-in'
+export const PROFILE_PATHNAME = '/profile'
+export const MOVIES_PATHNAME = '/movies'
+export const SAVED_MOVIES_PATHNAME = '/saved-movies'
+export const MAIN_PATHNAME = '/'
+export const UKNOWN_PATHNAME = '*'

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
@@ -19,8 +20,21 @@ import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import { getDataFromLocalStorage, setDataToLocalStorage } from '../../helpers/localStorageRequest'
-import { TEXT_SEARCH, MOVIES_SEARCH, FILTER_CHECKBOX_STATE, SAVED_MOVIES } from '../../constants/localStorage'
-
+import {
+  TEXT_SEARCH,
+  MOVIES_SEARCH,
+  FILTER_CHECKBOX_STATE,
+  SAVED_MOVIES
+} from '../../constants/localStorage'
+import {
+  REGISTER_PATHNAME,
+  LOGIN_PATHNAME,
+  MAIN_PATHNAME,
+  PROFILE_PATHNAME,
+  SAVED_MOVIES_PATHNAME,
+  MOVIES_PATHNAME,
+  UKNOWN_PATHNAME
+} from '../../constants/pathName'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -31,6 +45,7 @@ function App() {
   const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 425 && window.innerWidth <= 820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [maxRenderingCards, setMaxRenderingCards] = useState(0)
+  const [moviesListFromServer, setMoviesListFromServer] = useState([])
   const [moviesSearched, setMoviesSearched] = useState([])
   const [textSearch, setTextSearch] = useState('')
   const [textSavedMoviesSearch, setTextSavedMoviesSearch] = useState('')
@@ -57,6 +72,7 @@ function App() {
       setIsLoadingApp(false)
       return
     }
+
     Promise.all([AuthApi.getCurrentUserData(token), MainApi.getCurrentsUserMovies(token)])
       .then(([currentUserData, currentUserMovies]) => {
         setCurrentUser({
@@ -67,7 +83,9 @@ function App() {
         setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
         setCurrentUserMoviesList(currentUserMovies)
         setIsLoggedIn(true)
-        navigate('/movies')
+        checkIsKnownPath(pathName)
+          ? navigate(MOVIES_PATHNAME)
+          : navigate(UKNOWN_PATHNAME)
       })
       .catch(err => displayError(err))
       .finally(() => setIsLoadingApp(false))
@@ -79,13 +97,12 @@ function App() {
 
   useEffect(() => {
     const textSearched = localStorage.getItem(TEXT_SEARCH)
-    const moviesListSearched = getDataFromLocalStorage(MOVIES_SEARCH)
+    const moviesList = getDataFromLocalStorage(MOVIES_SEARCH)
     const filterCheckboxState = getDataFromLocalStorage(FILTER_CHECKBOX_STATE)
-    if (textSearched && moviesListSearched) {
+    if (textSearched && moviesList) {
       setTextSearch(textSearched)
       setIsShortMoviesFilterActive(filterCheckboxState)
-      setMoviesSearched(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
-
+      setMoviesSearched(filterMoviesListDuration(moviesList, filterCheckboxState))
     }
   }, [isShortMoviesFilterActive])
 
@@ -120,13 +137,27 @@ function App() {
     }
   }, [isSmallScreen, isMiddleScreen])
 
+  const checkIsKnownPath = (path) => [
+    MAIN_PATHNAME,
+    MOVIES_PATHNAME,
+    SAVED_MOVIES_PATHNAME,
+    PROFILE_PATHNAME,
+    REGISTER_PATHNAME,
+    LOGIN_PATHNAME].includes(path)
+  const showHeader = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME, PROFILE_PATHNAME].includes(path)
+  const showFooter = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME].includes(path)
+  const isRegisterPathName = (path) => REGISTER_PATHNAME.includes(path)
+  const isProfilePathName = (path) => PROFILE_PATHNAME.includes(path)
+  const returnPreviousPage = () => { navigate(-1) }
+
   function displayError(err) {
     console.log(err)
   }
 
   function showErrorToUser(err) {
     if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
-      setErorrSubmit('Произошла ошибка. Попробуйте снова');
+      setErorrSubmit('Произошла ошибка. Попробуйте снова')
+      setIsServerError(true)
     } else {
       try {
         const error = JSON.parse(err.message);
@@ -169,6 +200,7 @@ function App() {
       email: '',
       _id: '',
     })
+    setMoviesListFromServer([])
     setMoviesSearched([])
     setTextSearch('')
   }
@@ -195,45 +227,59 @@ function App() {
     setTextSavedMoviesSearch(keyword)
   }
 
-  function searchMovies(keyword) {
+  async function getMoviesList() {
+    if (moviesListFromServer.length !== 0) {
+      return moviesListFromServer
+    }
+    try {
+      const list = await MoviesApi.getMovies()
+      setMoviesListFromServer(list)
+      return list
+    } catch (err) {
+      throw showErrorToUser(err)
+    }
+  }
+
+
+  async function searchMovies(keyword) {
     setIsLoadingResultRequest(true)
     setTextSearch(keyword)
-    MoviesApi.getMovies()
-      .then(moviesList => {
-        setIsServerError(false)
-        const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
-        localStorage.setItem(TEXT_SEARCH, keyword)
-        setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
-        setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
-        setMoviesSearched(moviesListSearch)
-      })
-      .catch(() => {
-        setIsServerError(true)
-        setMoviesSearched([])
-
-      })
-      .finally(() => setIsLoadingResultRequest(false))
+    try {
+      const moviesList = await getMoviesList()
+      setIsServerError(false)
+      const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
+      localStorage.setItem(TEXT_SEARCH, keyword)
+      setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
+      setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
+      setTextSearch(keyword)
+      setMoviesSearched(filterMoviesListDuration(moviesListSearch, isShortMoviesFilterActive))
+      setIsLoadingResultRequest(false)
+    } catch (err) {
+      setIsLoadingResultRequest(false)
+      showErrorToUser(err)
+    }
   }
 
-  function updateMoviesList(textSearch, list, filterCheckboxState, functionChange) {
-    let moviesListSearched
+  function updateMoviesList(textSearch, list, filterCheckboxState, changeMoviesListFunction) {
+    let moviesList
     textSearch
-      ? moviesListSearched = filterMoviesListKeyword(textSearch, list)
-      : moviesListSearched = list
-    functionChange(filterMoviesListDuration(moviesListSearched, filterCheckboxState))
+      ? moviesList = filterMoviesListKeyword(textSearch, list)
+      : moviesList = list
+    changeMoviesListFunction(filterMoviesListDuration(moviesList, filterCheckboxState))
   }
 
-  function filterMoviesListDuration(moviesList, filterCheckboxState) {
-    let moviesRendering
-    filterCheckboxState
-      ? moviesRendering = moviesList.filter(movie => movie.duration <= 40)
-      : moviesRendering = moviesList
+  function filterMoviesListDuration(moviesList, filterCheckboxStateState) {
+    let moviesRendering = moviesList
+    if (filterCheckboxStateState) {
+      moviesRendering = moviesList.filter(movie => movie.duration <= 40)
+    }
     return moviesRendering
   }
 
   function handleFilterShortMovies() {
     localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortMoviesFilterActive)
     setIsShortMoviesFilterActive(!isShortMoviesFilterActive)
+
   }
 
   function handleFilterShortSavedMovies() {
@@ -287,11 +333,6 @@ function App() {
     setIsdropDownMenuOpen(false)
   }
 
-  const showHeader = (path) => ['/', '/movies', '/saved-movies', '/profile'].includes(path)
-  const showFooter = (path) => ['/', '/movies', '/saved-movies'].includes(path)
-  const isRegisterPathName = (path) => '/sign-up'.includes(path)
-  const isProfilePathName = (path) => '/profile'.includes(path)
-  const returnPreviousPage = () => { navigate(-1) }
 
   if (isLoadingApp) {
     return <Preloader isAppLoading={isLoadingApp} />
@@ -314,8 +355,8 @@ function App() {
             pathName={pathName} />}
 
         <Routes>
-          <Route path='/' element={<Main />} />
-          <Route path='/movies' element={
+          <Route path={MAIN_PATHNAME} element={<Main />} />
+          <Route path={MOVIES_PATHNAME} element={
             <ProtectedRouteElement
               element={Movies}
               isLoggedIn={isLoggedIn}
@@ -333,7 +374,7 @@ function App() {
               isServerError={isServerError}
               isLoading={isLoadingResultRequest}
             />} />
-          <Route path='/saved-movies' element={
+          <Route path={SAVED_MOVIES_PATHNAME} element={
             <ProtectedRouteElement
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
@@ -344,8 +385,9 @@ function App() {
               isShortFilterActive={isShortSavedMoviesFilterActive}
               onShortMoviesFilterClick={handleFilterShortSavedMovies}
               onMovieLike={handleMovieLike}
+              textSearch={textSavedMoviesSearch}
             />} />
-          <Route path='/profile' element={
+          <Route path={PROFILE_PATHNAME} element={
             <ProtectedRouteElement
               element={Profile}
               isLoggedIn={isLoggedIn}
@@ -358,7 +400,7 @@ function App() {
             />}
           />
           <Route
-            path='/sign-in' element={
+            path={LOGIN_PATHNAME} element={
               <Login
                 greetingText='Рады видеть'
                 formName='login'
@@ -367,7 +409,7 @@ function App() {
                 errorText={erorrSubmit}
               />} />
           <Route
-            path='/sign-up'
+            path={REGISTER_PATHNAME}
             element={
               <Register
                 greetingText='Добро пожаловать'
@@ -376,7 +418,7 @@ function App() {
                 onSignUp={registerUser}
                 errorText={erorrSubmit}
               />} />
-          <Route path='*' element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
+          <Route path={UKNOWN_PATHNAME} element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
         {showFooter(pathName) && <Footer />}
       </div>
