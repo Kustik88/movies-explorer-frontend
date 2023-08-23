@@ -3,10 +3,11 @@ import '../App/App.css'
 import { useForm } from 'react-hook-form'
 import { MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAIL_REQUIRED } from '../../constants/errorInput'
 import { REGEX_EMAIL } from '../../constants/regex'
-import { useEffect, useContext } from "react"
+import { useContext } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
+import { LOGIN_PATHNAME } from '../../constants/pathName'
 
 function EditUserForm({ onSubmit, logOutUser, errorText }) {
   const currentUser = useContext(CurrentUserContext)
@@ -19,10 +20,6 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
     watch
   } = useForm({
     mode: 'onChange'
-  })
-
-  useEffect(() => {
-
   })
 
   function handleSubmitData(data) {
@@ -93,7 +90,7 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
         disabled={!checkIsValid()}>
         Редактировать
       </button>
-      <Link to='/sign-in' className="link edit-user-form__logout-link" onClick={logOutUser}>
+      <Link to={LOGIN_PATHNAME} className="link edit-user-form__logout-link" onClick={logOutUser}>
         Выйти из аккаунта
       </Link>
     </form>

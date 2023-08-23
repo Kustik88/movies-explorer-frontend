@@ -5,6 +5,7 @@ import { REGEX_EMAIL } from '../../constants/regex'
 import './AuthForm.css'
 import '../App/App.css'
 import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
+import { LOGIN_PATHNAME, REGISTER_PATHNAME } from '../../constants/pathName'
 
 function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
   const { register,
@@ -29,7 +30,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
   const form = isRegisterPathName
     ? {
       buttonText: 'Зарегистрироваться',
-      pathName: '/sign-in',
+      pathName: LOGIN_PATHNAME,
       questionText: 'Уже зарегистрированы',
       linkText: 'Войти',
       registerFunctionUseForm: {
@@ -48,7 +49,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
     }
     : {
       buttonText: 'Войти',
-      pathName: '/sign-up',
+      pathName: REGISTER_PATHNAME,
       questionText: 'Еще не зарегистрированы',
       linkText: 'Регистрация',
       registerFunctionUseForm: {
