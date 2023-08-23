@@ -236,7 +236,8 @@ function App() {
       setMoviesListFromServer(list)
       return list
     } catch (err) {
-      throw showErrorToUser(new Error(err))
+      showErrorToUser(err)
+      throw err
     }
   }
 
@@ -245,6 +246,7 @@ function App() {
     try {
       setTextSearch(keyword)
       const moviesList = await getMoviesList()
+
       const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
       localStorage.setItem(TEXT_SEARCH, keyword)
       setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
@@ -253,7 +255,7 @@ function App() {
       setIsLoadingResultRequest(false)
     } catch (err) {
       setIsLoadingResultRequest(false)
-      showErrorToUser(err)
+      displayError(err)
     }
   }
 
@@ -298,28 +300,30 @@ function App() {
     setIsdropDownMenuOpen(!isdropDownMenuOpen)
   }
 
-  function handleMovieLike(movie) {
-    const movieObject = currentUserMoviesList.find(movieSaved => movieSaved.movieId === movie.movieId);
-    const isLiked = !!movieObject;
-    const movieObjectId = isLiked ? movieObject._id : null;
+  async function handleMovieLike(movie) {
+    const movieObject = currentUserMoviesList.find(movieSaved => movieSaved.movieId === movie.movieId)
+    const isLiked = !!movieObject
+    const movieObjectId = isLiked ? movieObject._id : null
 
     if (isLiked) {
-      MainApi.dislikeMovie(movieObjectId, token)
-        .then((deletingMovie) => {
-          const newList = currentUserMoviesList.filter(movie => movie.movieId !== deletingMovie.movieId)
-          updateCurrentUserList(newList)
-        }
-        )
-        .catch(err => displayError(err))
+      try {
+        const deletingMovie = await MainApi.dislikeMovie(movieObjectId, token)
+        const newList = currentUserMoviesList.filter(movie => movie.movieId !== deletingMovie.movieId)
+        updateCurrentUserList(newList)
+      } catch (err) {
+        displayError(err)
+      }
     } else {
-      MainApi.likeMovie(movie, token)
-        .then(newMovie => {
-          const newList = [...currentUserMoviesList, newMovie]
-          updateCurrentUserList(newList)
-        })
-        .catch(err => displayError(err))
+      try {
+        const newMovie = await MainApi.likeMovie(movie, token)
+        const newList = [...currentUserMoviesList, newMovie]
+        updateCurrentUserList(newList)
+      } catch (err) {
+        displayError(err)
+      }
     }
   }
+
 
   function updateCurrentUserList(list) {
     setDataToLocalStorage(SAVED_MOVIES, list)
