@@ -243,15 +243,14 @@ function App() {
 
   async function searchMovies(keyword) {
     setIsLoadingResultRequest(true)
-    setTextSearch(keyword)
     try {
+      setTextSearch(keyword)
       const moviesList = await getMoviesList()
       setIsServerError(false)
       const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
       localStorage.setItem(TEXT_SEARCH, keyword)
       setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
       setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
-      setTextSearch(keyword)
       setMoviesSearched(filterMoviesListDuration(moviesListSearch, isShortMoviesFilterActive))
       setIsLoadingResultRequest(false)
     } catch (err) {
