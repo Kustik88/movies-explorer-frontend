@@ -236,17 +236,15 @@ function App() {
       setMoviesListFromServer(list)
       return list
     } catch (err) {
-      throw showErrorToUser(err)
+      throw showErrorToUser(new Error(err))
     }
   }
-
 
   async function searchMovies(keyword) {
     setIsLoadingResultRequest(true)
     try {
       setTextSearch(keyword)
       const moviesList = await getMoviesList()
-      setIsServerError(false)
       const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
       localStorage.setItem(TEXT_SEARCH, keyword)
       setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)

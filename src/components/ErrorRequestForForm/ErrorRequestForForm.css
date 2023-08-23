@@ -1,6 +1,6 @@
 .error-request-form {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   max-width: 410px;
   color: #FF004C;
   min-height: 28px;

@@ -4,6 +4,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import AdderMovies from '../AdderMovies/AdderMovies'
 import BadSearchMoviesResult from '../BadSearchMoviesResult/BadSearchMoviesResult'
 import SavedDevider from '../SavedDevider/SavedDevider'
+import Preloader from '../Preloader/Preloader'
 
 function Movies({
   moviesList,
@@ -28,21 +29,24 @@ function Movies({
         textSearch={textSearch}
         isShortFilterActive={isShortFilterActive}
         onShortMoviesFilterClick={onShortMoviesFilterClick} />
-      {moviesList.length !== 0
-        ? <>
-          <MoviesCardList
-            moviesList={moviesList}
-            moviesSavingList={moviesSavingList}
-            numberOfRenderingCards={numberOfRenderingCards}
-            pathName={pathName}
-            onMovieLike={onMovieLike}
-            isLoading={isLoading} />
-          {(moviesList.length > numberOfRenderingCards && !isLoading)
-            ? <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
-            : <SavedDevider />}
-        </>
-        : textSearch ? <BadSearchMoviesResult isServerError={isServerError} /> : <SavedDevider />
+      {isLoading
+        ? <Preloader />
+        : moviesList.length !== 0
+          ? <>
+            <MoviesCardList
+              moviesList={moviesList}
+              moviesSavingList={moviesSavingList}
+              numberOfRenderingCards={numberOfRenderingCards}
+              pathName={pathName}
+              onMovieLike={onMovieLike}
+              isLoading={isLoading} />
+            {(moviesList.length > numberOfRenderingCards && !isLoading)
+              ? <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
+              : <SavedDevider />}
+          </>
+          : textSearch ? <BadSearchMoviesResult isServerError={isServerError} /> : <SavedDevider />
       }
+
     </Content>
   )
 }
