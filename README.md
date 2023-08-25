@@ -16,3 +16,7 @@
 Ссылка на репозиторий https://github.com/Kustik88/movies-explorer-frontend/tree/level-3
 
 Ссылка на макет Figma https://disk.yandex.ru/d/6sxc4_17NzJiSw
+
+Ссылка на пул-реквест https://github.com/Kustik88/movies-explorer-frontend/pull/2
+
+Ссылка на сайт https://kust-project.nomoreparties.sbs/movies
