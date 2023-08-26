@@ -135,7 +135,7 @@ function App() {
     } else {
       setMaxRenderingCards(12)
     }
-  }, [isSmallScreen, isMiddleScreen])
+  }, [isSmallScreen, isMiddleScreen, moviesSearched])
 
   const checkIsKnownPath = (path) => [
     MAIN_PATHNAME,
@@ -246,7 +246,6 @@ function App() {
     try {
       setTextSearch(keyword)
       const moviesList = await getMoviesList()
-
       const moviesListSearch = filterMoviesListKeyword(keyword, moviesList)
       localStorage.setItem(TEXT_SEARCH, keyword)
       setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
