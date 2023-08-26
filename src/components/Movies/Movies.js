@@ -39,7 +39,7 @@ function Movies({
               numberOfRenderingCards={numberOfRenderingCards}
               pathName={pathName}
               onMovieLike={onMovieLike}
-              isLoading={isLoading} />
+              isSmallScreen={isSmallScreen} />
             {(moviesList.length > numberOfRenderingCards && !isLoading)
               ? <AdderMovies onAdderMoviesClick={onAdderMoviesClick} />
               : <SavedDevider />}

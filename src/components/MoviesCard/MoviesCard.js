@@ -3,7 +3,7 @@ import './MoviesCard.css'
 import { Link } from 'react-router-dom'
 import { BASE_URL_MOVIES_API } from '../../constants/baseUrl'
 
-function MoviesCard({ card, isSaved, isSavedMoviesPage, onMovieLike }) {
+function MoviesCard({ card, isSaved, isSavedMoviesPage, isSmallScreen, onMovieLike }) {
   const hoursDuration = Math.floor(card.duration / 60)
   const minutesDuration = card.duration % 60
   let movie
@@ -35,7 +35,7 @@ function MoviesCard({ card, isSaved, isSavedMoviesPage, onMovieLike }) {
             className='btn card__like-btn card__like-btn_active'
             onClick={handleLikeMovie} />
           : <button
-            className='btn card__save-btn'
+            className={`btn card__save-btn${isSmallScreen ? ' card__save-btn_visible' : ''}`}
             type='button'
             aria-label='сохранить фильм'
             onClick={handleLikeMovie}>

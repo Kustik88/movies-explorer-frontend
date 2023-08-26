@@ -8,7 +8,7 @@ function MoviesCardList({
   numberOfRenderingCards,
   pathName,
   onMovieLike,
-  isLoading }) {
+  isSmallScreen }) {
 
   const isSavedMoviesPage = SAVED_MOVIES_PATHNAME.includes(pathName)
   let renderList
@@ -24,13 +24,16 @@ function MoviesCardList({
             key={card._id}
             card={card}
             isSavedMoviesPage={isSavedMoviesPage}
-            onMovieLike={onMovieLike} />)
+            onMovieLike={onMovieLike}
+            isSmallScreen={isSmallScreen} />)
         : renderList.map(card =>
           <MoviesCard
             key={card.id}
             card={card}
             isSaved={moviesSavingList.some(movie => movie.movieId === card.id)}
-            onMovieLike={onMovieLike} />
+            onMovieLike={onMovieLike}
+            isSmallScreen={isSmallScreen}
+          />
         )}
     </ul>
   )
