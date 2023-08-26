@@ -28,7 +28,9 @@ function SavedMovies({
           <MoviesCardList
             moviesList={moviesList}
             pathName={pathName}
-            onMovieLike={onMovieLike} />
+            isSmallScreen={isSmallScreen}
+            onMovieLike={onMovieLike}
+          />
           <SavedDevider />
         </>
         : textSearch

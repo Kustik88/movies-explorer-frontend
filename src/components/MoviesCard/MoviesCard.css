@@ -6,10 +6,6 @@
 }
 
 .card:hover .card__save-btn,
-.card__save-btn_visible {
-  display: block;
-}
-
 .card:hover .card__remove_btn {
   display: block;
 }
@@ -20,13 +16,17 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  display: none;
   padding: 0;
   background-image: url(../../images/movie-remove-icon.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-color: transparent;
   border: 0;
+  display: none;
+}
+
+.card__remove_btn_visible {
+  display: block;
 }
 
 .card__like-btn {
@@ -45,7 +45,6 @@
   display: block;
 }
 
-
 .card__save-btn {
   width: 72px;
   height: 21px;
@@ -61,7 +60,6 @@
   border-radius: 30px;
   border: 0;
   display: none;
-  cursor: pointer;
 }
 
 .card__save-btn_visible {

@@ -26,7 +26,7 @@ function MoviesCard({ card, isSaved, isSavedMoviesPage, isSmallScreen, onMovieLi
     <li className='card'>
       {isSavedMoviesPage
         ? <button
-          className='btn card__remove_btn'
+          className={`btn card__remove_btn${isSmallScreen ? ' card__remove_btn_visible' : ''}`}
           type='button'
           aria-label='удалить фильм'
           onClick={handleLikeMovie} />
