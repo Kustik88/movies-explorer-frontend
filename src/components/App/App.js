@@ -83,8 +83,11 @@ function App() {
         setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
         setCurrentUserMoviesList(currentUserMovies)
         setIsLoggedIn(true)
+
         checkIsKnownPath(pathName)
-          ? navigate(MOVIES_PATHNAME)
+          ? isLoginPathName(pathName) || isRegisterPathName(pathName)
+            ? navigate(MOVIES_PATHNAME)
+            : navigate(pathName)
           : navigate(UKNOWN_PATHNAME)
       })
       .catch(err => displayError(err))
@@ -114,7 +117,7 @@ function App() {
   useEffect(() => {
     setTextSavedMoviesSearch('')
     setIsSavedShortMoviesFilterActive(false)
-  }, [location.pathname])
+  }, [pathName])
 
   useEffect(() => {
     function handleResize() {
@@ -147,8 +150,9 @@ function App() {
   const showHeader = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME, PROFILE_PATHNAME].includes(path)
   const showFooter = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME].includes(path)
   const isRegisterPathName = (path) => REGISTER_PATHNAME.includes(path)
+  const isLoginPathName = (path) => LOGIN_PATHNAME.includes(path)
   const isProfilePathName = (path) => PROFILE_PATHNAME.includes(path)
-  const returnPreviousPage = () => { navigate(-1) }
+  const returnPreviousPage = () => { navigate(-2) }
 
   function displayError(err) {
     console.log(err)
@@ -322,7 +326,6 @@ function App() {
       }
     }
   }
-
 
   function updateCurrentUserList(list) {
     setDataToLocalStorage(SAVED_MOVIES, list)
