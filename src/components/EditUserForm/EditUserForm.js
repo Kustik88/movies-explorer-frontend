@@ -7,7 +7,7 @@ import { useContext } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
-import { LOGIN_PATHNAME } from '../../constants/pathName'
+import { MAIN_PATHNAME } from '../../constants/pathName'
 
 function EditUserForm({ onSubmit, logOutUser, errorText }) {
   const currentUser = useContext(CurrentUserContext)
@@ -90,7 +90,7 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
         disabled={!checkIsValid()}>
         Редактировать
       </button>
-      <Link to={LOGIN_PATHNAME} className="link edit-user-form__logout-link" onClick={logOutUser}>
+      <Link to={MAIN_PATHNAME} className="link edit-user-form__logout-link" onClick={logOutUser}>
         Выйти из аккаунта
       </Link>
     </form>
