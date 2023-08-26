@@ -396,7 +396,6 @@ function App() {
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
               errorText={erorrSubmit}
-
             />}
           />
           <Route
