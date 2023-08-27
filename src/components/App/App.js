@@ -35,10 +35,11 @@ import {
   MOVIES_PATHNAME,
   UKNOWN_PATHNAME
 } from '../../constants/pathName'
+import { DATA_CHANGED_SECCESSFULLY, ERROR_TRY_AGAIN, ERROR_PARSE_JSON } from '../../constants/messageForUser'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [erorrSubmit, setErorrSubmit] = useState('')
+  const [messageForUser, setMessageForUser] = useState('')
   const [currentUser, setCurrentUser] = useState({})
   const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480)
@@ -95,7 +96,7 @@ function App() {
   }, [token])
 
   useEffect(() => {
-    setErorrSubmit('')
+    setMessageForUser('')
   }, [navigate])
 
   useEffect(() => {
@@ -160,15 +161,15 @@ function App() {
 
   function showErrorToUser(err) {
     if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
-      setErorrSubmit('Произошла ошибка. Попробуйте снова')
+      setMessageForUser(ERROR_TRY_AGAIN)
       setIsServerError(true)
     } else {
       try {
         const error = JSON.parse(err.message);
         const message = error.message;
-        setErorrSubmit(message);
+        setMessageForUser(message);
       } catch (err) {
-        console.log('Ошибка при распарсивании JSON:', err);
+        console.log(ERROR_PARSE_JSON, err);
       }
     }
   }
@@ -215,6 +216,7 @@ function App() {
         setCurrentUser({
           name: res.name,
           email: res.email,
+          setMessageForUser: DATA_CHANGED_SECCESSFULLY
         })
       })
       .catch(err => showErrorToUser(err))
@@ -281,13 +283,11 @@ function App() {
   function handleFilterShortMovies() {
     localStorage.setItem(FILTER_CHECKBOX_STATE, !isShortMoviesFilterActive)
     setIsShortMoviesFilterActive(!isShortMoviesFilterActive)
-
   }
 
   function handleFilterShortSavedMovies() {
     setIsSavedShortMoviesFilterActive(!isShortSavedMoviesFilterActive)
   }
-
 
   function handleAddCardsToPage() {
     if (isSmallScreen) {
@@ -335,7 +335,6 @@ function App() {
   function closeAllPopups() {
     setIsdropDownMenuOpen(false)
   }
-
 
   if (isLoadingApp) {
     return <Preloader isAppLoading={isLoadingApp} />
@@ -398,7 +397,7 @@ function App() {
               editUserData={handleEditUserData}
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
-              errorText={erorrSubmit}
+              errorText={messageForUser}
             />}
           />
           <Route
@@ -408,7 +407,7 @@ function App() {
                 formName='login'
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onLogin={loginUser}
-                errorText={erorrSubmit}
+                errorText={messageForUser}
               />} />
           <Route
             path={REGISTER_PATHNAME}
@@ -418,7 +417,7 @@ function App() {
                 formName='register'
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onSignUp={registerUser}
-                errorText={erorrSubmit}
+                errorText={messageForUser}
               />} />
           <Route path={UKNOWN_PATHNAME} element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
