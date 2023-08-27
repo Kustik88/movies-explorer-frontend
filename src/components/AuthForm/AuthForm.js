@@ -3,25 +3,23 @@ import { useForm } from 'react-hook-form'
 import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
 import './AuthForm.css'
 import '../App/App.css'
-import ErrorRequestForForm from '../ErrorRequestForForm/ResultRequestForm'
+import ResultRequestForm from '../ResultRequestForm/ResultRequestForm'
 import { LOGIN_PATHNAME, REGISTER_PATHNAME } from '../../constants/pathName'
 import { validateEmail, validateName } from '../../helpers/validation'
 
-function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
+function AuthForm({ formName, isRegisterPathName, onSubmit, errorText, isSubmiting }) {
   const { register,
     handleSubmit,
     formState: {
       errors,
       isValid
     },
-    reset,
   } = useForm({ mode: 'onChange' })
 
   function handleSubmitData(data) {
     isRegisterPathName
       ? onSubmit(data.name, data.email, data.password)
       : onSubmit(data.email, data.password)
-    reset()
   }
 
   const userNameFormId = `user-name-${formName}`
@@ -121,12 +119,12 @@ function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
           {errors.password && errors.password.message}
         </span>
       </div>
-      <ErrorRequestForForm text={errorText} />
+      <ResultRequestForm message={errorText} />
       <button
         className="btn auth-form__sbt-button"
         type="submit"
         aria-label="Отправить данные"
-        disabled={!isValid}>
+        disabled={!isValid || isSubmiting}>
         {form.buttonText}
       </button>
       <div className="auth-form__text">

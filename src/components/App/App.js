@@ -40,6 +40,7 @@ import { DATA_CHANGED_SECCESSFULLY, ERROR_TRY_AGAIN, ERROR_PARSE_JSON } from '..
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [messageForUser, setMessageForUser] = useState('')
+  const [isSubmitingDataForm, setIsSubmitingDataForm] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480)
@@ -175,6 +176,7 @@ function App() {
   }
 
   function registerUser(name, email, password) {
+    setIsSubmitingDataForm(true)
     AuthApi.register(name, email, password)
       .then(() => {
         loginUser(email, password)
@@ -182,9 +184,11 @@ function App() {
       .catch(err => {
         showErrorToUser(err)
       })
+      .finally(() => setIsSubmitingDataForm(false))
   }
 
   function loginUser(email, password) {
+    setIsSubmitingDataForm(true)
     AuthApi.authorize(email, password)
       .then(res => {
         Cookies.set('jwt', res.token, { expires: 3 })
@@ -193,6 +197,7 @@ function App() {
       .catch(err => {
         showErrorToUser(err)
       })
+      .finally(() => setIsSubmitingDataForm(false))
   }
 
   function logOutUser() {
@@ -211,6 +216,7 @@ function App() {
   }
 
   function handleEditUserData(name, email) {
+    setIsSubmitingDataForm(true)
     MainApi.editCurrentUserData(name, email, token)
       .then(res => {
         setCurrentUser({
@@ -220,6 +226,7 @@ function App() {
         setMessageForUser(DATA_CHANGED_SECCESSFULLY)
       })
       .catch(err => showErrorToUser(err))
+      .finally(() => setIsSubmitingDataForm(false))
   }
 
   function filterMoviesListKeyword(keyword, list) {
@@ -398,6 +405,7 @@ function App() {
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
               message={messageForUser}
+              isSubmiting={isSubmitingDataForm}
             />}
           />
           <Route
@@ -408,6 +416,7 @@ function App() {
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onLogin={loginUser}
                 errorText={messageForUser}
+                isSubmiting={isSubmitingDataForm}
               />} />
           <Route
             path={REGISTER_PATHNAME}
@@ -418,6 +427,7 @@ function App() {
                 isRegisterPathName={isRegisterPathName(pathName)}
                 onSignUp={registerUser}
                 errorText={messageForUser}
+                isSubmiting={isSubmitingDataForm}
               />} />
           <Route path={UKNOWN_PATHNAME} element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
