@@ -38,6 +38,13 @@ import {
 import { DATA_CHANGED_SECCESSFULLY, ERROR_TRY_AGAIN, ERROR_PARSE_JSON } from '../../constants/messageForUser'
 import { SIZE_SCREEN_480, SIZE_SCREEN_820 } from '../../constants/sizeScreen'
 import { DURATION_MOVIE_40 } from '../../constants/durationMovie'
+import {
+  MOVIES_RENDERING_12,
+  MOVIES_RENDERING_8,
+  MOVIES_RENDERING_5,
+  MOVIES_RENDERING_3,
+  MOVIES_RENDERING_2
+} from '../../constants/numberOfMovies'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -125,8 +132,8 @@ function App() {
 
   useEffect(() => {
     function handleResize() {
-      setIsSmallScreen(window.innerWidth <= 425)
-      setIsMiddleScreen(window.innerWidth > 425 && window.innerWidth <= 820)
+      setIsSmallScreen(window.innerWidth <= SIZE_SCREEN_480)
+      setIsMiddleScreen(window.innerWidth > SIZE_SCREEN_480 && window.innerWidth <= SIZE_SCREEN_820)
     }
 
     window.addEventListener("resize", handleResize);
@@ -136,11 +143,11 @@ function App() {
 
   useEffect(() => {
     if (isSmallScreen) {
-      setMaxRenderingCards(5)
+      setMaxRenderingCards(MOVIES_RENDERING_5)
     } else if (isMiddleScreen) {
-      setMaxRenderingCards(8)
+      setMaxRenderingCards(MOVIES_RENDERING_8)
     } else {
-      setMaxRenderingCards(12)
+      setMaxRenderingCards(MOVIES_RENDERING_12)
     }
   }, [isSmallScreen, isMiddleScreen, moviesSearched])
 
@@ -300,11 +307,11 @@ function App() {
 
   function handleAddCardsToPage() {
     if (isSmallScreen) {
-      setMaxRenderingCards(maxRenderingCards + 2)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_2)
     } else if (isMiddleScreen) {
-      setMaxRenderingCards(maxRenderingCards + 2)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_2)
     } else {
-      setMaxRenderingCards(maxRenderingCards + 3)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_3)
     }
   }
 
