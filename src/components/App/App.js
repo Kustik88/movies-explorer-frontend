@@ -37,6 +37,7 @@ import {
 } from '../../constants/pathName'
 import { DATA_CHANGED_SECCESSFULLY, ERROR_TRY_AGAIN, ERROR_PARSE_JSON } from '../../constants/messageForUser'
 import { SIZE_SCREEN_480, SIZE_SCREEN_820 } from '../../constants/sizeScreen'
+import { DURATION_MOVIE_40 } from '../../constants/durationMovie'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -45,7 +46,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= SIZE_SCREEN_480)
-  const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > 480 && window.innerWidth <= SIZE_SCREEN_820)
+  const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > SIZE_SCREEN_480 && window.innerWidth <= SIZE_SCREEN_820)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [maxRenderingCards, setMaxRenderingCards] = useState(0)
   const [moviesListFromServer, setMoviesListFromServer] = useState([])
@@ -283,7 +284,7 @@ function App() {
   function filterMoviesListDuration(moviesList, filterCheckboxStateState) {
     let moviesRendering = moviesList
     if (filterCheckboxStateState) {
-      moviesRendering = moviesList.filter(movie => movie.duration <= 40)
+      moviesRendering = moviesList.filter(movie => movie.duration <= DURATION_MOVIE_40)
     }
     return moviesRendering
   }
