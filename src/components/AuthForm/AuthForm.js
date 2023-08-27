@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAIL_REQUIRED } from '../../constants/errorInput'
-import { REGEX_EMAIL } from '../../constants/regex'
+import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
 import './AuthForm.css'
 import '../App/App.css'
 import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
 import { LOGIN_PATHNAME, REGISTER_PATHNAME } from '../../constants/pathName'
+import { validateEmail } from '../../helpers/validateEmail'
 
 function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
   const { register,
@@ -97,10 +97,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
           id={emailFormId}
           {...register('email', {
             required: FIELD_REQURED,
-            pattern: {
-              value: REGEX_EMAIL,
-              message: EMAIL_REQUIRED
-            }
+            validate: (value) => validateEmail(value)
           })}
         />
         <span

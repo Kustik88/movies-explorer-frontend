@@ -1,8 +1,8 @@
 import './EditUserForm.css'
 import '../App/App.css'
 import { useForm } from 'react-hook-form'
-import { MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED, EMAIL_REQUIRED } from '../../constants/errorInput'
-import { REGEX_EMAIL } from '../../constants/regex'
+import { MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
+import { validateEmail } from '../../helpers/validateEmail'
 import { useContext } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
@@ -70,11 +70,9 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
           placeholder="Введите почту"
           {...register('email', {
             required: FIELD_REQURED,
-            pattern: {
-              value: REGEX_EMAIL,
-              message: EMAIL_REQUIRED
-            }
-          })} />
+            validate: (value) => validateEmail(value)
+          }
+          )} />
         <span
           className={`edit-user-form__input-error${errors.email
             ? ' edit-user-form__input-error_visible'
