@@ -1,3 +1,3 @@
-export const REGEX_EMAIL = /^[a-z0-9._%+-]+@[a-z0-9.-]+[.]{1}[a-z]{2,4}$/
+export const REGEX_NAME = /^[а-яА-ЯёЁa-zA-Z\s-]+$/
 
 

@@ -2,7 +2,7 @@ import './EditUserForm.css'
 import '../App/App.css'
 import { useForm } from 'react-hook-form'
 import { MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
-import { validateEmail } from '../../helpers/validateEmail'
+import { validateEmail, validateName } from '../../helpers/validation'
 import { useContext } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
@@ -53,7 +53,8 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
             maxLength: {
               value: 40,
               message: MAX_LENGTH_FORTY
-            }
+            },
+            validate: (value) => validateName(value)
           })} />
         <span
           className={`edit-user-form__input-error${errors.name

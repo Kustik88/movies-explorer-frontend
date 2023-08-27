@@ -5,7 +5,7 @@ import './AuthForm.css'
 import '../App/App.css'
 import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
 import { LOGIN_PATHNAME, REGISTER_PATHNAME } from '../../constants/pathName'
-import { validateEmail } from '../../helpers/validateEmail'
+import { validateEmail, validateName } from '../../helpers/validation'
 
 function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
   const { register,
@@ -80,6 +80,7 @@ function AuthForm({ formName, isRegisterPathName, onSubmit, errorText }) {
                   value: 40,
                   message: MAX_LENGTH_FORTY
                 },
+                validate: (value) => validateName(value)
               })}
             />
             <span
