@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { MIN_LENGTH_SEVEN, MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
 import './AuthForm.css'
 import '../App/App.css'
-import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
+import ErrorRequestForForm from '../ErrorRequestForForm/ResultRequestForm'
 import { LOGIN_PATHNAME, REGISTER_PATHNAME } from '../../constants/pathName'
 import { validateEmail, validateName } from '../../helpers/validation'
 

@@ -6,10 +6,10 @@ import { validateEmail, validateName } from '../../helpers/validation'
 import { useContext } from "react"
 import { Link } from 'react-router-dom'
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
-import ErrorRequestForForm from '../ErrorRequestForForm/ErrorRequestForForm'
+import ErrorRequestForForm from '../ErrorRequestForForm/ResultRequestForm'
 import { MAIN_PATHNAME } from '../../constants/pathName'
 
-function EditUserForm({ onSubmit, logOutUser, errorText }) {
+function EditUserForm({ onSubmit, logOutUser, message }) {
   const currentUser = useContext(CurrentUserContext)
   const { register,
     handleSubmit,
@@ -81,7 +81,7 @@ function EditUserForm({ onSubmit, logOutUser, errorText }) {
           {errors.email && errors.email.message}
         </span>
       </div>
-      <ErrorRequestForForm text={errorText} />
+      <ErrorRequestForForm message={message} />
       <button
         type="submit"
         aria-label='редактировать профиль'

@@ -216,8 +216,8 @@ function App() {
         setCurrentUser({
           name: res.name,
           email: res.email,
-          setMessageForUser: DATA_CHANGED_SECCESSFULLY
         })
+        setMessageForUser(DATA_CHANGED_SECCESSFULLY)
       })
       .catch(err => showErrorToUser(err))
   }
@@ -397,7 +397,7 @@ function App() {
               editUserData={handleEditUserData}
               isProfilePathName={isProfilePathName}
               logOutUser={logOutUser}
-              errorText={messageForUser}
+              message={messageForUser}
             />}
           />
           <Route
