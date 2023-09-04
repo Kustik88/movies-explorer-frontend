@@ -36,14 +36,14 @@ import {
   UKNOWN_PATHNAME
 } from '../../constants/pathName'
 import { DATA_CHANGED_SECCESSFULLY, ERROR_TRY_AGAIN, ERROR_PARSE_JSON } from '../../constants/messageForUser'
-import { SIZE_SCREEN_480, SIZE_SCREEN_820 } from '../../constants/sizeScreen'
-import { DURATION_MOVIE_40 } from '../../constants/durationMovie'
+import { SIZE_SCREEN_SMALL, SIZE_SCREEN_MID } from '../../constants/sizeScreen'
+import { DURATION_MOVIE_SHORT } from '../../constants/durationMovie'
 import {
-  MOVIES_RENDERING_12,
-  MOVIES_RENDERING_8,
-  MOVIES_RENDERING_5,
-  MOVIES_RENDERING_3,
-  MOVIES_RENDERING_2
+  MOVIES_LARGE_SCREEN,
+  MOVIES_MID_SCREEN,
+  MOVIES_SMALL_SCREEN,
+  MOVIES_ADDING_TO_LARGE_SCREEN,
+  MOVIES_ADDING_TO_MID_SCREEN
 } from '../../constants/numberOfMovies'
 
 function App() {
@@ -52,8 +52,8 @@ function App() {
   const [isSubmitingDataForm, setIsSubmitingDataForm] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [currentUserMoviesList, setCurrentUserMoviesList] = useState([])
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= SIZE_SCREEN_480)
-  const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > SIZE_SCREEN_480 && window.innerWidth <= SIZE_SCREEN_820)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= SIZE_SCREEN_SMALL)
+  const [isMiddleScreen, setIsMiddleScreen] = useState(window.innerWidth > SIZE_SCREEN_SMALL && window.innerWidth <= SIZE_SCREEN_MID)
   const [isdropDownMenuOpen, setIsdropDownMenuOpen] = useState(false)
   const [maxRenderingCards, setMaxRenderingCards] = useState(0)
   const [moviesListFromServer, setMoviesListFromServer] = useState([])
@@ -132,8 +132,8 @@ function App() {
 
   useEffect(() => {
     function handleResize() {
-      setIsSmallScreen(window.innerWidth <= SIZE_SCREEN_480)
-      setIsMiddleScreen(window.innerWidth > SIZE_SCREEN_480 && window.innerWidth <= SIZE_SCREEN_820)
+      setIsSmallScreen(window.innerWidth <= SIZE_SCREEN_SMALL)
+      setIsMiddleScreen(window.innerWidth > SIZE_SCREEN_SMALL && window.innerWidth <= SIZE_SCREEN_MID)
     }
 
     window.addEventListener("resize", handleResize);
@@ -143,11 +143,11 @@ function App() {
 
   useEffect(() => {
     if (isSmallScreen) {
-      setMaxRenderingCards(MOVIES_RENDERING_5)
+      setMaxRenderingCards(MOVIES_SMALL_SCREEN)
     } else if (isMiddleScreen) {
-      setMaxRenderingCards(MOVIES_RENDERING_8)
+      setMaxRenderingCards(MOVIES_MID_SCREEN)
     } else {
-      setMaxRenderingCards(MOVIES_RENDERING_12)
+      setMaxRenderingCards(MOVIES_LARGE_SCREEN)
     }
   }, [isSmallScreen, isMiddleScreen, moviesSearched])
 
@@ -291,7 +291,7 @@ function App() {
   function filterMoviesListDuration(moviesList, filterCheckboxStateState) {
     let moviesRendering = moviesList
     if (filterCheckboxStateState) {
-      moviesRendering = moviesList.filter(movie => movie.duration <= DURATION_MOVIE_40)
+      moviesRendering = moviesList.filter(movie => movie.duration <= DURATION_MOVIE_SHORT)
     }
     return moviesRendering
   }
@@ -307,11 +307,11 @@ function App() {
 
   function handleAddCardsToPage() {
     if (isSmallScreen) {
-      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_2)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_ADDING_TO_MID_SCREEN)
     } else if (isMiddleScreen) {
-      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_2)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_ADDING_TO_MID_SCREEN)
     } else {
-      setMaxRenderingCards(maxRenderingCards + MOVIES_RENDERING_3)
+      setMaxRenderingCards(maxRenderingCards + MOVIES_ADDING_TO_LARGE_SCREEN)
     }
   }
 

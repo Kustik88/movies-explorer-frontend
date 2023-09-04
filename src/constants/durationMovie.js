@@ -1,1 +1,1 @@
-export const DURATION_MOVIE_40 = 40
+export const DURATION_MOVIE_SHORT = 40

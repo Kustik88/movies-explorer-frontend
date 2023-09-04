@@ -1,2 +1,2 @@
-export const SIZE_SCREEN_480 = 480
-export const SIZE_SCREEN_820 = 820
+export const SIZE_SCREEN_SMALL = 480
+export const SIZE_SCREEN_MID = 820
