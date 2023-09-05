@@ -83,26 +83,7 @@ function App() {
       setIsLoadingApp(false)
       return
     }
-
-    Promise.all([AuthApi.getCurrentUserData(token), MainApi.getCurrentsUserMovies(token)])
-      .then(([currentUserData, currentUserMovies]) => {
-        setCurrentUser({
-          name: currentUserData.name,
-          email: currentUserData.email,
-          _id: currentUserData._id,
-        })
-        setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
-        setCurrentUserMoviesList(currentUserMovies)
-        setIsLoggedIn(true)
-
-        checkIsKnownPath(pathName)
-          ? isLoginPathName(pathName) || isRegisterPathName(pathName)
-            ? navigate(MOVIES_PATHNAME)
-            : navigate(pathName)
-          : navigate(UKNOWN_PATHNAME)
-      })
-      .catch(err => displayError(err))
-      .finally(() => setIsLoadingApp(false))
+    fetchData()
   }, [token])
 
   useEffect(() => {
@@ -164,6 +145,32 @@ function App() {
   const isLoginPathName = (path) => LOGIN_PATHNAME.includes(path)
   const isProfilePathName = (path) => PROFILE_PATHNAME.includes(path)
   const returnPreviousPage = () => { navigate(-2) }
+
+  const fetchData = async () => {
+    try {
+      const [currentUserData, currentUserMovies] = await Promise.all([
+        AuthApi.getCurrentUserData(token),
+        MainApi.getCurrentsUserMovies(token)
+      ])
+      setCurrentUser({
+        name: currentUserData.name,
+        email: currentUserData.email,
+        _id: currentUserData._id,
+      })
+      setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
+      setCurrentUserMoviesList(currentUserMovies)
+      setIsLoggedIn(true)
+      checkIsKnownPath(pathName)
+        ? isLoginPathName(pathName) || isRegisterPathName(pathName)
+          ? navigate(MOVIES_PATHNAME)
+          : navigate(pathName)
+        : navigate(UKNOWN_PATHNAME)
+    } catch (err) {
+      displayError(err)
+    } finally {
+      setIsLoadingApp(false)
+    }
+  }
 
   function displayError(err) {
     console.log(err)
@@ -273,10 +280,10 @@ function App() {
       setDataToLocalStorage(FILTER_CHECKBOX_STATE, isShortMoviesFilterActive)
       setDataToLocalStorage(MOVIES_SEARCH, moviesListSearch)
       setMoviesSearched(filterMoviesListDuration(moviesListSearch, isShortMoviesFilterActive))
-      setIsLoadingResultRequest(false)
     } catch (err) {
-      setIsLoadingResultRequest(false)
       displayError(err)
+    } finally {
+      setIsLoadingResultRequest(false)
     }
   }
 
