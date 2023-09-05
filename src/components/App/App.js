@@ -20,6 +20,8 @@ import * as MainApi from '../../utils/MainApi'
 import * as MoviesApi from '../../utils/MoviesApi'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 import { getDataFromLocalStorage, setDataToLocalStorage } from '../../helpers/localStorageRequest'
+import { displayError } from '../../helpers/displayError'
+import { containsKey } from '../../helpers/containsKey'
 import {
   TEXT_SEARCH,
   MOVIES_SEARCH,
@@ -66,7 +68,6 @@ function App() {
   const [isServerError, setIsServerError] = useState(false)
   const [isLoadingApp, setIsLoadingApp] = useState(true)
   const [isLoadingResultRequest, setIsLoadingResultRequest] = useState(false)
-
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -132,18 +133,19 @@ function App() {
     }
   }, [isSmallScreen, isMiddleScreen, moviesSearched])
 
-  const checkIsKnownPath = (path) => [
+  const checkIsKnownPath = () => containsKey(pathName, [
     MAIN_PATHNAME,
     MOVIES_PATHNAME,
     SAVED_MOVIES_PATHNAME,
     PROFILE_PATHNAME,
     REGISTER_PATHNAME,
-    LOGIN_PATHNAME].includes(path)
-  const showHeader = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME, PROFILE_PATHNAME].includes(path)
-  const showFooter = (path) => [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME].includes(path)
-  const isRegisterPathName = (path) => REGISTER_PATHNAME.includes(path)
-  const isLoginPathName = (path) => LOGIN_PATHNAME.includes(path)
-  const isProfilePathName = (path) => PROFILE_PATHNAME.includes(path)
+    LOGIN_PATHNAME
+  ])
+  const showHeader = () => containsKey(pathName, [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME, PROFILE_PATHNAME])
+  const showFooter = () => containsKey(pathName, [MOVIES_PATHNAME, MAIN_PATHNAME, SAVED_MOVIES_PATHNAME])
+  const isRegisterPathName = () => containsKey(pathName, REGISTER_PATHNAME)
+  const isLoginPathName = () => containsKey(pathName, LOGIN_PATHNAME)
+  const isProfilePathName = () => containsKey(pathName, PROFILE_PATHNAME)
   const returnPreviousPage = () => { navigate(-2) }
 
   const fetchData = async () => {
@@ -160,8 +162,8 @@ function App() {
       setDataToLocalStorage(SAVED_MOVIES, currentUserMovies)
       setCurrentUserMoviesList(currentUserMovies)
       setIsLoggedIn(true)
-      checkIsKnownPath(pathName)
-        ? isLoginPathName(pathName) || isRegisterPathName(pathName)
+      checkIsKnownPath()
+        ? isLoginPathName() || isRegisterPathName()
           ? navigate(MOVIES_PATHNAME)
           : navigate(pathName)
         : navigate(UKNOWN_PATHNAME)
@@ -172,12 +174,8 @@ function App() {
     }
   }
 
-  function displayError(err) {
-    console.log(err)
-  }
-
   function showErrorToUser(err) {
-    if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
+    if (err instanceof TypeError && containsKey('Failed to fetch', err.message)) {
       setMessageForUser(ERROR_TRY_AGAIN)
       setIsServerError(true)
     } else {
@@ -248,7 +246,8 @@ function App() {
   function filterMoviesListKeyword(keyword, list) {
     const keywordToLowerCase = keyword.toLowerCase()
     return list.filter(movie => {
-      return movie.nameRU.toLowerCase().includes(keywordToLowerCase) || movie.nameEN.toLowerCase().includes(keywordToLowerCase)
+      return containsKey(keywordToLowerCase, movie.nameRU.toLowerCase())
+        || containsKey(keywordToLowerCase, movie.nameEN.toLowerCase())
     })
   }
 
@@ -372,7 +371,7 @@ function App() {
           onClose={closeAllPopups}
           pathName={pathName}
         />
-        {showHeader(pathName)
+        {showHeader()
           && <Header
             isLoggedIn={isLoggedIn}
             isMiddleScreen={isMiddleScreen || isSmallScreen}
@@ -429,7 +428,7 @@ function App() {
               <Login
                 greetingText='Рады видеть'
                 formName='login'
-                isRegisterPathName={isRegisterPathName(pathName)}
+                isRegisterPathName={isRegisterPathName()}
                 onLogin={loginUser}
                 errorText={messageForUser}
                 isSubmiting={isSubmitingDataForm}
@@ -440,14 +439,14 @@ function App() {
               <Register
                 greetingText='Добро пожаловать'
                 formName='register'
-                isRegisterPathName={isRegisterPathName(pathName)}
+                isRegisterPathName={isRegisterPathName()}
                 onSignUp={registerUser}
                 errorText={messageForUser}
                 isSubmiting={isSubmitingDataForm}
               />} />
           <Route path={UKNOWN_PATHNAME} element={<PageNotFound returnPreviousPage={returnPreviousPage} />} />
         </Routes>
-        {showFooter(pathName) && <Footer />}
+        {showFooter() && <Footer />}
       </div>
     </CurrentUserContext.Provider>
   )
