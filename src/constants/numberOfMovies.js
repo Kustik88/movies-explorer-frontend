@@ -1,0 +1,6 @@
+export const MOVIES_SMALL_SCREEN = 5
+export const MOVIES_MID_SCREEN = 8
+export const MOVIES_LARGE_SCREEN = 12
+export const MOVIES_ADDING_TO_MID_SCREEN = 2
+export const MOVIES_ADDING_TO_LARGE_SCREEN = 3
+

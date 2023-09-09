@@ -2,21 +2,40 @@ import Content from '../Content/Content'
 import SearchForm from '../SearchForm/SearchForm'
 import MoviesCardList from '../MoviesCardList/MoviesCardList'
 import SavedDevider from '../SavedDevider/SavedDevider'
-import NotFoundMovies from '../NotFoundMovies/NotFoundMovies'
+import NotFoundMovies from '../BadSearchMoviesResult/BadSearchMoviesResult'
 
-function SavedMovies({ moviesList, isSavedMoviesPage, isSmallScreen, pathName }) {
+function SavedMovies({
+  moviesList,
+  isSmallScreen,
+  pathName,
+  onShortMoviesFilterClick,
+  onSearch,
+  onMovieLike,
+  textSearch,
+  isShortFilterActive,
+  isDisabledFilter,
+}) {
   return (
     <Content>
-      <SearchForm isSmallScreen={isSmallScreen} />
+      <SearchForm isSmallScreen={isSmallScreen}
+        onSubmit={onSearch}
+        textSearch={textSearch}
+        isShortFilterActive={isShortFilterActive}
+        onShortMoviesFilterClick={onShortMoviesFilterClick}
+        isDisabledFilter={isDisabledFilter} />
       {moviesList.length !== 0
         ? <>
           <MoviesCardList
             moviesList={moviesList}
-            isSavedMoviesPage={isSavedMoviesPage}
-            pathName={pathName} />
+            pathName={pathName}
+            isSmallScreen={isSmallScreen}
+            onMovieLike={onMovieLike}
+          />
           <SavedDevider />
         </>
-        : <NotFoundMovies />}
+        : textSearch
+          ? <NotFoundMovies />
+          : <SavedDevider />}
     </Content>
   )
 }

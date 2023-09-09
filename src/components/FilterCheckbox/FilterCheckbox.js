@@ -1,15 +1,21 @@
 import './FilterCheckbox.css'
 
-function FilterCheckbox() {
+function FilterCheckbox({ onShortMoviesFilterClick, isShortFilterActive }) {
+
   return (
     <form className='filter-checkbox'>
       <input
-        type='radio'
+        type='checkbox'
         name='short-movie'
-        id='short-movie-radio'
-        className='filter-checkbox__radio'
+        id='short-movie-checkbox'
+        className='filter-checkbox__checkbox'
+        onChange={onShortMoviesFilterClick}
+        defaultChecked={isShortFilterActive}
       />
-      <label className='filter-checkbox__new-radio' htmlFor='short-movie-radio'></label>
+      <label
+        className='filter-checkbox__new-checkbox'
+        htmlFor='short-movie-checkbox'
+      />
       <h3 className='filter-checkbox__heading'>Короткометражки</h3>
     </form>
   )

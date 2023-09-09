@@ -1,52 +1,95 @@
 import './EditUserForm.css'
 import '../App/App.css'
-import { useState } from "react"
+import { useForm } from 'react-hook-form'
+import { MIN_LENGTH_TWO, MAX_LENGTH_FORTY, FIELD_REQURED } from '../../constants/errorInput'
+import { validateEmail, validateName } from '../../helpers/validation'
+import { useContext } from "react"
 import { Link } from 'react-router-dom'
+import { CurrentUserContext } from "../../contexts/CurrentUserContext"
+import ResultRequestForm from '../ResultRequestForm/ResultRequestForm'
+import { MAIN_PATHNAME } from '../../constants/pathName'
 
-function EditUserForm() {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
+function EditUserForm({ onSubmit, logOutUser, message, isSubmiting }) {
+  const currentUser = useContext(CurrentUserContext)
+  const { register,
+    handleSubmit,
+    formState: {
+      errors,
+      isValid
+    },
+    watch
+  } = useForm({
+    mode: 'onChange'
   })
 
-  function handleChange(e) {
-    const input = e.target
-    setFormValues({
-      ...formValues,
-      [input.name]: input.value
-    })
+  function handleSubmitData(data) {
+    onSubmit(data.name, data.email)
+  }
+
+  function checkIsValid() {
+    const newName = watch("name");
+    const newEmail = watch("email");
+    const isSameValues =
+      newName !== currentUser.name || newEmail !== currentUser.email;
+    return isValid && isSameValues;
   }
 
   return (
-    <form className="edit-user-form">
+    <form className="edit-user-form" onSubmit={handleSubmit(handleSubmitData)} noValidate>
       <div className="edit-user-form__input-container">
         <label htmlFor="name-edit-user-form" className="edit-user-form__label">Имя</label>
         <input
           type="text"
-          value={formValues.name}
+          defaultValue={currentUser.name}
           id='name-edit-user-form'
-          name="name"
-          onChange={handleChange}
           className="edit-user-form__input"
           placeholder="Введите имя"
-          minLength="2"
-          maxLength="40"
-          required />
+          {...register('name', {
+            required: FIELD_REQURED,
+            minLength: {
+              value: 2,
+              message: MIN_LENGTH_TWO
+            },
+            maxLength: {
+              value: 40,
+              message: MAX_LENGTH_FORTY
+            },
+            validate: (value) => validateName(value)
+          })} />
+        <span
+          className={`edit-user-form__input-error${errors.name
+            ? ' edit-user-form__input-error_visible'
+            : ''}`}>
+          {errors.name && errors.name.message}
+        </span>
         <label htmlFor="email-edit-user-form" className="edit-user-form__label">E-mail</label>
         <input
           type="email"
-          value={formValues.email}
+          defaultValue={currentUser.email}
           id='email-edit-user-form'
-          name="email"
-          onChange={handleChange}
           className="edit-user-form__input"
           placeholder="Введите почту"
-          required />
+          {...register('email', {
+            required: FIELD_REQURED,
+            validate: (value) => validateEmail(value)
+          }
+          )} />
+        <span
+          className={`edit-user-form__input-error${errors.email
+            ? ' edit-user-form__input-error_visible'
+            : ''}`}>
+          {errors.email && errors.email.message}
+        </span>
       </div>
-      <button type="submit" aria-label='редактировать профиль' className="btn edit-user-form__sbt-button">
+      <ResultRequestForm message={message} />
+      <button
+        type="submit"
+        aria-label='редактировать профиль'
+        className="btn edit-user-form__sbt-button"
+        disabled={!checkIsValid() || isSubmiting}>
         Редактировать
       </button>
-      <Link to='/sign-in' className="link edit-user-form__logout-link">
+      <Link to={MAIN_PATHNAME} className="link edit-user-form__logout-link" onClick={logOutUser}>
         Выйти из аккаунта
       </Link>
     </form>
