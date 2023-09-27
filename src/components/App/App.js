@@ -146,7 +146,7 @@ function App() {
   const isRegisterPathName = () => containsKey(pathName, REGISTER_PATHNAME)
   const isLoginPathName = () => containsKey(pathName, LOGIN_PATHNAME)
   const isProfilePathName = () => containsKey(pathName, PROFILE_PATHNAME)
-  const returnPreviousPage = () => { navigate(-2) }
+  const returnPreviousPage = () => { navigate(-1) }
 
   const fetchData = async () => {
     try {
